@@ -78,6 +78,15 @@ HTTP 4xx với `detail`: `{ "code": "...", "message": "..." }` — ví dụ `TAB
 
 Mặc định cho phép origin Vite `localhost` / `127.0.0.1` cổng 5173–5174; chỉnh `PI_CORS_ORIGINS`.
 
+## Frontend (Vite) — biến môi trường (A05)
+
+| Biến | Ứng dụng | Mô tả |
+|------|----------|--------|
+| `VITE_API_BASE_URL` | customer-web, admin-web | URL gốc Pi (không có `/api/v1`). Mặc định code: `http://127.0.0.1:8000` |
+| `VITE_DEFAULT_TABLE_CODE` | customer-web | Mã bàn khi không có `?table=` và không dùng path `/t/:code`. Mặc định: `1` |
+
+Chi tiết chạy local: `customer-web/README.md`, `admin-web/README.md`.
+
 ## Lệnh PIC (không HTTP trong MVP — trừ dev ở trên)
 
 `CMD_COUNTER_LOOKUP`, `CMD_COUNTER_PAID` — chỉ trong `pi-backend/app/services/pic_commands.py`, chờ worker NRF gọi.  
