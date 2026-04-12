@@ -1,4 +1,5 @@
 import { CreditCard, Send, ShoppingCart } from 'lucide-react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AppHeader } from '@/components/AppHeader'
 import { CartLineItem } from '@/components/CartLineItem'
@@ -7,6 +8,9 @@ import { PrimaryButton } from '@/components/PrimaryButton'
 import { SecondaryButton } from '@/components/SecondaryButton'
 import { useCart } from '@/context/CartContext'
 import { useTableSession } from '@/context/TableSessionContext'
+import { postDevKitchenDone } from '@/api/devApi'
+import { ApiError } from '@/api/http'
+import { showE2eDevPanel } from '@/lib/e2eDev'
 import { menuPath } from '@/lib/paths'
 import { formatVnd } from '@/lib/money'
 
@@ -41,7 +45,11 @@ export function CartPage() {
     requestPaymentError,
     requestPayment,
     clearPaymentFeedback,
+    refetchActiveCart,
   } = useCart()
+
+  const [devKitchenBusy, setDevKitchenBusy] = useState(false)
+  const [devKitchenErr, setDevKitchenErr] = useState<string | null>(null)
 
   const goMenu = () => navigate(menuPath(location))
 
@@ -220,6 +228,52 @@ export function CartPage() {
               <p className="text-sm font-medium text-primary">
                 Đã gửi yêu cầu thanh toán.
               </p>
+            ) : null}
+          </section>
+        ) : null}
+
+        {showE2eDevPanel() &&
+        orderStatus === 'IN_KITCHEN' &&
+        lines.length > 0 ? (
+          <section className="mt-8 rounded-xl border-2 border-dashed border-state-warning/50 bg-state-warning/10 p-4 text-xs text-foreground">
+            <p className="mb-2 font-bold uppercase tracking-wide text-accent-wood">
+              Test local — giả PIC bếp
+            </p>
+            <p className="mb-3 text-muted-foreground">
+              Cần backend <code className="rounded bg-muted px-1">PI_DEBUG=1</code>.
+              Nút này gọi <code className="rounded bg-muted px-1">POST .../dev/.../kitchen-done</code>{' '}
+              (không dùng trên bản thật).
+            </p>
+            <button
+              type="button"
+              disabled={devKitchenBusy}
+              className="w-full rounded-lg border border-border bg-surface py-2 text-sm font-medium disabled:opacity-50"
+              onClick={() => {
+                setDevKitchenErr(null)
+                setDevKitchenBusy(true)
+                void (async () => {
+                  try {
+                    await postDevKitchenDone(tableCode)
+                    await refetchActiveCart()
+                    void refetchSession()
+                  } catch (e) {
+                    const text =
+                      e instanceof ApiError
+                        ? `${e.message}${e.status === 404 ? ' — bật PI_DEBUG=1 trên Pi backend' : ''}`
+                        : e instanceof Error
+                          ? e.message
+                          : 'Lỗi'
+                    setDevKitchenErr(text)
+                  } finally {
+                    setDevKitchenBusy(false)
+                  }
+                })()
+              }}
+            >
+              {devKitchenBusy ? 'Đang gửi…' : 'Dev: bếp xong (CMD_KITCHEN_DONE)'}
+            </button>
+            {devKitchenErr ? (
+              <p className="mt-2 text-state-danger">{devKitchenErr}</p>
             ) : null}
           </section>
         ) : null}

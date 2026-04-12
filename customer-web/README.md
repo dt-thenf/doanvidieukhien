@@ -9,6 +9,7 @@ Giao diện **mobile-first** nối **pi-backend** (REST `/api/v1/customer/...`).
 
    - `VITE_API_BASE_URL` — URL gốc backend (không kèm `/api/v1`). Mặc định: `http://127.0.0.1:8000`
    - `VITE_DEFAULT_TABLE_CODE` — mã bàn khi không dùng URL. Mặc định: `1`
+   - `VITE_ENABLE_E2E_DEV_PANEL=1` — chỉ khi học E2E local: hiện khối **Dev: bếp xong** trên trang giỏ (gọi `POST .../dev/.../kitchen-done`). Backend phải bật **`PI_DEBUG=1`**. Mặc định: không đặt → **ẩn hoàn toàn**.
 
 3. Cài dependency và chạy dev:
 
@@ -27,7 +28,8 @@ Giao diện **mobile-first** nối **pi-backend** (REST `/api/v1/customer/...`).
 ## Ghi chú MVP
 
 - Giá và tổng tiền là **số nguyên VND** (`total_minor` / `priceVnd`).
-- Route dev `POST /api/v1/dev/.../kitchen-done` chỉ có khi backend bật `PI_DEBUG=1`; frontend **không** dựa vào route này cho luồng chính.
+- Route dev (`kitchen-done`, `counter-paid` trên backend) chỉ có khi **`PI_DEBUG=1`**; luồng khách thật **không** phụ thuộc các route này. UI dev chỉ hiện khi **`VITE_ENABLE_E2E_DEV_PANEL=1`**.
+- Full flow local (reset bàn, giả quầy thu tiền): xem **`pi-backend/README.md`** và admin-web (thanh dev trên Tổng quan bàn nếu bật cùng biến env).
 
 ## Stack
 

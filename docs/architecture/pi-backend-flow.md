@@ -34,7 +34,8 @@
 
 ### Dev local (`PI_DEBUG=1`)
 
-- **`POST /api/v1/dev/tables/{table_id}/kitchen-done`:** gọi `apply_kitchen_done` cho đơn **active** của bàn — chỉ để test/Swagger, **không** thay PIC thật trên production.
+- **`POST /api/v1/dev/tables/{table_id}/kitchen-done`:** gọi `apply_kitchen_done` cho đơn **active** của bàn — test/Swagger/UI E2E, **không** thay PIC thật trên production.
+- **`POST /api/v1/dev/tables/{table_id}/counter-paid`:** gọi `apply_counter_paid` — giả **`CMD_COUNTER_PAID`** (quầy đã thu); chỉ khi `Payment` đang **REQUESTED**. Trên bản thật, bước này do **PIC quầy** sau khi nhân viên xác nhật; web admin **không** là chốt tiền chính.
 
 ## Admin reset bàn
 

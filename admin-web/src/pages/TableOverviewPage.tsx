@@ -9,6 +9,7 @@ import { SecondaryButton } from '@/components/SecondaryButton'
 import { StatusChip } from '@/components/StatusChip'
 import { postResetTable, fetchTablesOverview } from '@/api/adminApi'
 import { ApiError } from '@/api/http'
+import { E2eDevToolbar, showE2eDevToolbar } from '@/components/E2eDevToolbar'
 import type { TableOverviewRow, TableStateUi } from '@/types/domain'
 
 const FILTER_OPTIONS = [
@@ -102,6 +103,9 @@ export function TableOverviewPage() {
     <div className="min-h-dvh">
       <AppHeader />
       <main className="mx-auto max-w-[1280px] px-6 py-8">
+        {showE2eDevToolbar() ? (
+          <E2eDevToolbar onAfterAction={() => void load()} />
+        ) : null}
         <div className="mb-8 flex flex-col items-end gap-6 md:flex-row md:justify-between">
           <div>
             <p className="mb-1 text-[11px] font-bold uppercase tracking-widest text-accent-wood">

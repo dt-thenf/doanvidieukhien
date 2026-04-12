@@ -18,7 +18,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-**Khi học / test tay (khuyến nghị):** bật `PI_DEBUG=1` để có **Swagger** hiện nhóm **dev-only** (giả lập bếp xong đơn).
+**Khi học / test full flow local (khuyến nghị):** bật `PI_DEBUG=1` để có **Swagger** nhóm **dev-only** (giả lập **bếp xong đơn** và **quầy đã thu tiền** — tương đương `CMD_KITCHEN_DONE` / `CMD_COUNTER_PAID` trong `pic_commands.py`).
 
 ```bash
 # Windows PowerShell
@@ -33,22 +33,28 @@ PI_DEBUG=1 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 - OpenAPI: http://127.0.0.1:8000/docs  
 - Health: `GET /api/v1/health`
 
-## Test local từng bước (beginner)
+## Luồng test local end-to-end (beginner)
 
-Chuẩn bị: chạy server với **`PI_DEBUG=1`**, mở http://127.0.0.1:8000/docs .
+Chuẩn bị:
 
-Dùng **Bàn 06** (`table_id` = `6`) trong seed — đang **IDLE**, thích hợp tạo phiên mới.
+1. Backend **`PI_DEBUG=1`** (xem trên).
+2. (Tuỳ chọn) **customer-web** + **admin-web** trỏ `VITE_API_BASE_URL=http://127.0.0.1:8000`.
+3. (Tuỳ chọn) Đặt **`VITE_ENABLE_E2E_DEV_PANEL=1`** trên frontend để có nút bấm gọi `/dev/*` (xem README từng app). Không đặt biến này → UI không lộ công cụ dev.
 
-| Bước | Việc làm | Endpoint (nhóm trên Swagger) |
-|------|----------|------------------------------|
-| 1 | Xem thực đơn (tuỳ chọn) | `GET /api/v1/customer/menu` |
+Dùng **Bàn 06** (`table_id` = `6`) trong seed — **IDLE**, phù hợp một vòng demo sạch.
+
+| Bước | Việc làm | Ghi chú |
+|------|----------|---------|
+| 1 | (Tuỳ chọn) Xem thực đơn | `GET /api/v1/customer/menu` hoặc customer-web |
 | 2 | Kiểm tra bàn | `GET /api/v1/customer/tables/6` |
-| 3 | **Tạo / cập nhật đơn** (giỏ gửi bếp) | `POST /api/v1/customer/tables/6/orders/active` — body ví dụ: `{"lines":[{"menuItemId":"canh-rau","quantity":1,"lineNote":""}],"orderNote":""}` |
-| 4 | **Bếp xong đơn** (local: giả PIC) | `POST /api/v1/dev/tables/6/kitchen-done` — chỉ có khi `PI_DEBUG=1` |
-| 5 | Khách **yêu cầu thanh toán** | `POST /api/v1/customer/tables/6/payment/request` |
-| 6 | **Reset bàn** (admin) — chỉ khi bàn **SETTLED** | Với luồng trên, bàn đang **PAYMENT_REQUESTED**; chốt tiền thật là **PIC** (`CMD_COUNTER_PAID`). Để tập **reset** mà không cần PIC: dùng bàn seed **đã SETTLED**, ví dụ **Bàn 03**: `POST /api/v1/admin/tables/3/reset` |
+| 3 | **Tạo / cập nhật đơn** (gửi bếp) | `POST /api/v1/customer/tables/6/orders/active` — ví dụ body: `{"lines":[{"menuItemId":"canh-rau","quantity":1,"lineNote":""}],"orderNote":""}` |
+| 4 | **Bếp xong đơn** (giả PIC bếp) | **`POST /api/v1/dev/tables/6/kitchen-done`** — **chỉ khi `PI_DEBUG=1`** |
+| 5 | Khách **yêu cầu thanh toán** | `POST /api/v1/customer/tables/6/payment/request` — đơn phải **DONE** |
+| 6 | **Quầy đã thu** (giả PIC quầy, `CMD_COUNTER_PAID`) | **`POST /api/v1/dev/tables/6/counter-paid`** — **chỉ khi `PI_DEBUG=1`**; bàn → **SETTLED** |
+| 7 | **Reset bàn** (nhân viên / sau kết sổ) | `POST /api/v1/admin/tables/6/reset` — **chỉ khi** bàn **SETTLED** → **IDLE** |
 
-Gợi ý: sau bước 3–5 có thể xem **`GET /api/v1/admin/tables/overview`** và **`GET /api/v1/admin/payments/queue`** để quen dữ liệu admin.
+Sau bước 5 có thể mở admin-web **Chờ thanh toán** hoặc `GET /api/v1/admin/payments/queue`.  
+**Lưu ý:** trên bản thật, bước 6 do **thiết bị PIC quầy**, không phải web admin; route dev chỉ để tập trước firmware.
 
 ## Biến môi trường (tuỳ chọn)
 
@@ -60,7 +66,7 @@ Gợi ý: sau bước 3–5 có thể xem **`GET /api/v1/admin/tables/overview`*
 
 ## Seed demo
 
-Lần đầu chạy (DB trống), `lifespan` tạo bảng và gọi `seed_if_empty`: vài bàn (01–06, 12), món chay khớp `customer-web` mock, vài đơn/thanh toán phục vụ 4 màn Stitch/admin.
+Lần đầu chạy (DB trống), `lifespan` tạo bảng và gọi `seed_if_empty`: vài bàn (01–06, 12), món chay, vài đơn/thanh toán phục vụ demo.
 
 ## Kiểm thử
 
@@ -79,4 +85,4 @@ pytest -q
 ## Stub Pi ↔ PIC
 
 - `app/services/pic_bridge.py` — gửi sự kiện (stub + retry ngủ 120ms).  
-- `app/services/pic_commands.py` — xử lý `CMD_KITCHEN_DONE`, `CMD_COUNTER_LOOKUP`, `CMD_COUNTER_PAID`. Trên HTTP: **chỉ** `CMD_KITCHEN_DONE` được giả lập qua **`POST /api/v1/dev/.../kitchen-done`** khi `PI_DEBUG=1`; các `CMD_*` khác vẫn chờ worker NRF.
+- `app/services/pic_commands.py` — xử lý `CMD_KITCHEN_DONE`, `CMD_COUNTER_LOOKUP`, `CMD_COUNTER_PAID`. Trên HTTP (dev): **`kitchen-done`** và **`counter-paid`** khi `PI_DEBUG=1`; `CMD_COUNTER_LOOKUP` chưa có HTTP dev trong MVP này.

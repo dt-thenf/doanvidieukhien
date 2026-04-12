@@ -61,12 +61,13 @@ HTTP 4xx với `detail`: `{ "code": "...", "message": "..." }` — ví dụ `TAB
 | Method | Path | Mô tả |
 |--------|------|--------|
 | POST | `/tables/{table_id}/kitchen-done` | Giả `CMD_KITCHEN_DONE` cho đơn **active** của bàn (test local / Swagger) |
+| POST | `/tables/{table_id}/counter-paid` | Giả `CMD_COUNTER_PAID` theo `table_id` — `Payment` **REQUESTED** → **PAID**, bàn → **SETTLED** (idempotent nếu đã PAID) |
 
 **Quy tắc:**
 
 - Khi **`PI_DEBUG` tắt:** các route này **không được mount** → client nhận **404** (không lộ surface dev trên bản chạy “gần production”).
 - **Không** dùng trên Pi demo công khai / bảo vệ nếu không chủ đích mở debug.
-- Mã xử lý nghiệp vụ giống RF: gọi `apply_kitchen_done` trong `pic_commands.py`.
+- Mã xử lý nghiệp vụ giống RF: `kitchen-done` → `apply_kitchen_done`; `counter-paid` → `apply_counter_paid` trong `pic_commands.py`.
 
 ## Hệ thống
 
@@ -78,16 +79,17 @@ HTTP 4xx với `detail`: `{ "code": "...", "message": "..." }` — ví dụ `TAB
 
 Mặc định cho phép origin Vite `localhost` / `127.0.0.1` cổng 5173–5174; chỉnh `PI_CORS_ORIGINS`.
 
-## Frontend (Vite) — biến môi trường (A05)
+## Frontend (Vite) — biến môi trường (A05 / A05.1)
 
 | Biến | Ứng dụng | Mô tả |
 |------|----------|--------|
 | `VITE_API_BASE_URL` | customer-web, admin-web | URL gốc Pi (không có `/api/v1`). Mặc định code: `http://127.0.0.1:8000` |
 | `VITE_DEFAULT_TABLE_CODE` | customer-web | Mã bàn khi không có `?table=` và không dùng path `/t/:code`. Mặc định: `1` |
+| `VITE_ENABLE_E2E_DEV_PANEL` | customer-web, admin-web | Đặt `1` để hiện **UI test E2E tối thiểu** (gọi route `/dev/*`). Chỉ dùng khi backend **`PI_DEBUG=1`**. Mặc định: ẩn. |
 
-Chi tiết chạy local: `customer-web/README.md`, `admin-web/README.md`.
+Chi tiết chạy local: `customer-web/README.md`, `admin-web/README.md`, `pi-backend/README.md`.
 
-## Lệnh PIC (không HTTP trong MVP — trừ dev ở trên)
+## Lệnh PIC (không HTTP trong bản production — trừ dev ở trên)
 
-`CMD_COUNTER_LOOKUP`, `CMD_COUNTER_PAID` — chỉ trong `pi-backend/app/services/pic_commands.py`, chờ worker NRF gọi.  
-`CMD_KITCHEN_DONE` — cùng file; trên HTTP chỉ có bản **dev** khi `PI_DEBUG=1`.
+`CMD_COUNTER_LOOKUP` — chỉ trong `pic_commands.py`, chờ worker NRF (không có HTTP dev trong MVP này).  
+`CMD_KITCHEN_DONE`, `CMD_COUNTER_PAID` — cùng file; trên HTTP chỉ có bản **dev** khi `PI_DEBUG=1` (`kitchen-done`, `counter-paid`).
