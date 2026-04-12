@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "primary": "#6B8F71", // Sage
+                "secondary": "#C4A882", // Soft wood
+                "background": "#FAF7F2", // Organic off-white
+                "surface": "#FFFFFF",
+                "on-surface": "#3A3A3A",
+                "outline": "#8E918E"
+            },
+            "fontFamily": {
+                "headline": ["Poppins", "sans-serif"],
+                "body": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+        body {
+            background-color: #FAF7F2;
+        }
+        .flat-card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAE2D5;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #EAE2D5;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-body text-on-surface selection:bg-primary/10">
+<!-- Top Navigation Bar -->
+<header class="bg-surface border-b border-[#EAE2D5] sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-[1280px] mx-auto">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<span class="text-lg font-semibold text-primary font-headline">Quán chay — vận hành</span>
+<span class="text-[10px] bg-secondary/10 px-2 py-0.5 rounded text-secondary font-bold uppercase tracking-wider">demo LAN</span>
+</div>
+<nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+<a class="text-primary border-b-2 border-primary pb-1" href="#">Tổng quan bàn</a>
+<a class="text-outline hover:text-primary transition-colors" href="#">Thực đơn</a>
+<a class="text-outline hover:text-primary transition-colors" href="#">Báo cáo</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-secondary/20">
+<img class="w-full h-full object-cover" data-alt="portrait of a male restaurant staff member" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_WpvOFryeIDTInaiFPYF4FLpi2GwTO5tgCcGXVSNxafnPP1WtfV73SMwPu-hpFILuW9_ecawthNCznTs3l6RPbsWsiXnbcMaR-DJ2dg9XUx3MuI-O1QY7hOa1sxQkyl8A4AcLAsd03ygb4u8Fpo7OBAvGr0mjkB7KxIKjfES-j9QO6leMm_fqlL3i7G4-orXCNnscYbRMZuQIoGm0O27zDT0cRbz4YDFUshcQND74L4WtxO5zoQzkRvcaxzbAVdsMfL0li7BT1CKP"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1280px] mx-auto px-6 py-8">
+<!-- Header & KPIs -->
+<div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
+<div>
+<p class="text-[11px] font-bold tracking-widest text-secondary uppercase mb-1">Thời gian thực</p>
+<h1 class="text-2xl font-bold font-headline text-on-surface">Tổng quan khu vực bàn</h1>
+</div>
+<div class="flex flex-wrap gap-3">
+<!-- KPI Tile: OPEN -->
+<div class="flat-card px-5 py-3 rounded-lg flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg" data-icon="restaurant">restaurant</span>
+</div>
+<div>
+<p class="text-[10px] font-medium text-outline uppercase">Đang phục vụ</p>
+<p class="text-lg font-semibold tabular-nums">5 <span class="text-xs font-normal text-outline lowercase">bàn</span></p>
+</div>
+</div>
+<!-- KPI Tile: PAYMENT -->
+<div class="flat-card px-5 py-3 rounded-lg flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="text-[10px] font-medium text-outline uppercase">Chờ thanh toán</p>
+<p class="text-lg font-semibold tabular-nums">2 <span class="text-xs font-normal text-outline lowercase">bàn</span></p>
+</div>
+</div>
+<!-- KPI Tile: SETTLED -->
+<div class="flat-card px-5 py-3 rounded-lg flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-[10px] font-medium text-outline uppercase">Đã kết sổ</p>
+<p class="text-lg font-semibold tabular-nums">12 <span class="text-xs font-normal text-outline lowercase">bàn</span></p>
+</div>
+</div>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="flex items-center gap-2 mb-6">
+<button class="px-4 py-1.5 rounded bg-primary text-white text-xs font-medium">Tất cả</button>
+<button class="px-4 py-1.5 rounded bg-surface border border-[#EAE2D5] text-on-surface text-xs font-medium hover:bg-background transition-colors">Đang phục vụ</button>
+<button class="px-4 py-1.5 rounded bg-surface border border-[#EAE2D5] text-on-surface text-xs font-medium hover:bg-background transition-colors">Chờ thanh toán</button>
+<button class="px-4 py-1.5 rounded bg-surface border border-[#EAE2D5] text-on-surface text-xs font-medium hover:bg-background transition-colors">Đã kết sổ</button>
+</div>
+<!-- Main Table -->
+<div class="flat-card rounded-lg overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse tabular-nums">
+<thead class="bg-[#F8F5F0]">
+<tr>
+<th class="px-6 py-4 text-[11px] font-bold text-outline uppercase tracking-wider">Bàn</th>
+<th class="px-6 py-4 text-[11px] font-bold text-outline uppercase tracking-wider">Trạng thái</th>
+<th class="px-6 py-4 text-[11px] font-bold text-outline uppercase tracking-wider">Mã đơn</th>
+<th class="px-6 py-4 text-[11px] font-bold text-outline uppercase tracking-wider">Tổng (VNĐ)</th>
+<th class="px-6 py-4 text-[11px] font-bold text-outline uppercase tracking-wider">Cập nhật</th>
+<th class="px-6 py-4 text-[11px] font-bold text-outline uppercase tracking-wider text-right">Thao tác</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#EAE2D5] text-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-[#FAF7F2]/50 transition-colors">
+<td class="px-6 py-5 font-semibold text-primary">Bàn 01</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase">
+<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Open
+                            </span>
+</td>
+<td class="px-6 py-5 text-outline">#VEG-1024</td>
+<td class="px-6 py-5 font-medium">450.000</td>
+<td class="px-6 py-5 text-outline">2 phút trước</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary font-medium hover:underline">Xem</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-[#FAF7F2]/50 transition-colors">
+<td class="px-6 py-5 font-semibold text-primary">Bàn 02</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary/10 text-secondary uppercase">
+<span class="w-1 h-1 rounded-full bg-secondary mr-1.5"></span> Payment Request
+                            </span>
+</td>
+<td class="px-6 py-5 text-outline">#VEG-1025</td>
+<td class="px-6 py-5 font-medium">820.000</td>
+<td class="px-6 py-5 text-outline">5 phút trước</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary font-medium hover:underline">Xem</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-[#FAF7F2]/50 transition-colors">
+<td class="px-6 py-5 font-semibold text-primary">Bàn 03</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-outline uppercase">
+<span class="w-1 h-1 rounded-full bg-outline mr-1.5"></span> Settled
+                            </span>
+</td>
+<td class="px-6 py-5 text-outline">#VEG-1018</td>
+<td class="px-6 py-5 text-outline">1.250.000</td>
+<td class="px-6 py-5 text-outline">25 phút trước</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-4 items-center">
+<button class="text-primary font-medium hover:underline">Xem</button>
+<button class="text-[11px] text-outline border border-[#EAE2D5] px-2 py-1 rounded hover:bg-background">Reset bàn</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-[#FAF7F2]/50 transition-colors">
+<td class="px-6 py-5 font-semibold text-primary">Bàn 04</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase">
+<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Open
+                            </span>
+</td>
+<td class="px-6 py-5 text-outline">#VEG-1026</td>
+<td class="px-6 py-5 font-medium">120.000</td>
+<td class="px-6 py-5 text-outline">12 phút trước</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary font-medium hover:underline">Xem</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-[#FAF7F2]/50 transition-colors">
+<td class="px-6 py-5 font-semibold text-primary">Bàn 05</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase">
+<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Open
+                            </span>
+</td>
+<td class="px-6 py-5 text-outline">#VEG-1027</td>
+<td class="px-6 py-5 font-medium">315.000</td>
+<td class="px-6 py-5 text-outline">Mới đây</td>
+<td class="px-6 py-5 text-right">
+<button class="text-primary font-medium hover:underline">Xem</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-12 border-t border-[#EAE2D5] py-8">
+<div class="flex flex-col md:flex-row justify-between items-center px-6 w-full max-w-[1280px] mx-auto gap-4">
+<p class="text-[11px] text-outline">
+            © 2024 The Culinary Atelier — Hệ thống Quản lý Vận hành
+        </p>
+<div class="flex gap-6">
+<a class="text-[11px] text-outline hover:text-primary transition-colors" href="#">Hỗ trợ</a>
+<a class="text-[11px] text-outline hover:text-primary transition-colors" href="#">Báo cáo lỗi</a>
+<a class="text-[11px] text-outline hover:text-primary transition-colors" href="#">Tài liệu</a>
+</div>
+</div>
+</footer>
+</body></html>

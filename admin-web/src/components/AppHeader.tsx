@@ -44,7 +44,7 @@ export function AppHeader({ className }: AppHeaderProps) {
         </div>
         <div
           className="flex size-9 items-center justify-center rounded-full border border-accent-wood/30 bg-muted text-muted-foreground"
-          title="Nhân viên (mock)"
+          title="Tài khoản nhân viên (chưa đăng nhập — demo)"
         >
           <UserRound className="size-5" strokeWidth={1.5} />
         </div>

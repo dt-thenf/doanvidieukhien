@@ -28,7 +28,7 @@
 
 | Cột | Kiểu | Mô tả |
 |-----|------|--------|
-| `id` | TEXT PK | Slug ổn định (khớp frontend mock) |
+| `id` | TEXT PK | Slug ổn định (khớp seed / `customer-web` & `admin-web`) |
 | `name` | TEXT | Tên món |
 | `price_minor` | INTEGER | Giá VND nguyên |
 | `category_id` | TEXT | Nhóm menu |

@@ -1,5 +1,7 @@
-# Decisions / ADR (stub)
+# Quyết định kỹ thuật (ADR)
 
-Placeholder for short Architecture Decision Records (e.g. message format Pi↔PIC, DB choice, auth model for demo).
+**Nguồn sự thật:** [`decision-log.md`](decision-log.md) tại thư mục này (root repo).
 
-*Add one file per decision when the team locks a choice.*
+**Mirror:** `restaurant-pi-pic/docs/decisions/decision-log.md` — khi sửa, giữ **đồng bộ nội dung** với bản root (xem header trong `decision-log.md`).
+
+Các file ADR tách riêng từng quyết định có thể bổ sung sau; hiện tập trung log tại `decision-log.md`.
