@@ -1,28 +1,10 @@
 # Decision Log — Restaurant Pi + PIC (demo đồ án)
 
-> **Đồng bộ GitHub (A01.6):** bản publish chính tại `docs/decisions/decision-log.md` trên `dt-thenf/doanvidieukhien`. Bản làm việc trong tree ứng dụng: `restaurant-pi-pic/docs/decisions/decision-log.md` (nên giữ hai bản **đồng nội dung** khi sửa).
+> **Đồng bộ GitHub (A01.6):** bản publish tại root repo `docs/decisions/decision-log.md` (`dt-thenf/doanvidieukhien`). File này trong `restaurant-pi-pic/docs/decisions/` nên giữ **cùng nội dung** với bản publish khi chỉnh sửa.
 
 Mục đích: ghi các quyết định kiến trúc / giao thức để tránh “đổi ngầm” giữa các agent và giữa các phiên làm việc.
 
-**Nguồn tham chiếu trong repo:** `restaurant-pi-pic/AGENTS.md`, `restaurant-pi-pic/docs/architecture/PRODUCT_HANDOFF.md`, `restaurant-pi-pic/docs/architecture/pi-pic-protocol.md`, `restaurant-pi-pic/docs/architecture/event-mapping.md`, `restaurant-pi-pic/docs/architecture/golden-demo-flow.md`, `docs/architecture/stack-decision.md`, `docs/architecture/design-workflow.md`.
-
----
-
-## Phụ lục — Khởi tạo dự án (tóm tắt ban đầu, giữ từ lịch sử repo)
-
-> Các ý sau **vẫn đúng**; chi tiết kỹ thuật đã được mở rộng thành các mục **D-xx** phía dưới.
-
-### Đã chấp nhận
-1. **Kiến trúc tổng thể:** Raspberry Pi làm trung tâm (web + CSDL + logic); một PIC16F887; NRF24L01 làm kênh Pi–PIC.
-2. **Không MCU tại bàn:** khách chỉ dùng điện thoại + QR + web.
-3. **Một PIC cho hai cụm IO:** bếp (buzzer, LCD, nút) và quầy (keypad 4×4, LCD) — firmware phải có **chế độ** rõ ràng.
-4. **Phạm vi đồ án:** ưu tiên đơn giản, dễ demo; không mở rộng đa chi nhánh hay thanh toán trực tuyến thật.
-5. **Nguồn sự thật trên Pi:** mọi trạng thái nghiệp vụ có nghĩa do Pi quyết định sau lệnh hợp lệ từ web hoặc PIC.
-
-### Để mở rộng sau (lịch sử — phần lớn đã có bản chi tiết trong D-xx)
-- Danh sách mã lệnh RF và giới hạn payload → **D-2026-04-12-01**, **D-04**.
-- Một phiên / nhiều đơn; thanh toán → **D-2026-04-12-16** và các mục Payment/Table liên quan.
-- ACK/retry/timeout RF → **D-2026-04-12-02**, **D-03**, **D-19**.
+**Nguồn tham chiếu trong repo:** `AGENTS.md`, `docs/architecture/PRODUCT_HANDOFF.md`, `docs/architecture/pi-pic-protocol.md`, `docs/architecture/event-mapping.md`, `docs/architecture/golden-demo-flow.md`, `docs/architecture/stack-decision.md`, `docs/architecture/design-workflow.md` (các đường dẫn này tương đối thư mục `restaurant-pi-pic/` khi clone monorepo).
 
 ---
 
