@@ -1,16 +1,20 @@
-# doanvidieukhien — Restaurant (Pi + PIC16F887 + NRF24)
+# Đồ án — Hệ thống quản lý nhà hàng (Pi + PIC16F887 + NRF24)
 
-Đồ án / nền móng dự án: **hệ thống quản lý nhà hàng** với **Raspberry Pi** (web, API, CSDL, logic), **một PIC16F887** (giao diện bếp + quầy), **NRF24L01** (liên kết Pi ↔ PIC), khách **đặt món qua web theo QR từng bàn**.
+## Mô tả ngắn
+Hệ thống hỗ trợ vận hành nhà hàng mô hình demo: **Raspberry Pi** làm trung tâm (web, CSDL, logic nghiệp vụ); khách **quét QR từng bàn** để đặt món qua **web**; **một** vi điều khiển **PIC16F887** phục vụ **bếp** (buzzer, LCD, nút) và **quầy** (keypad 4×4, LCD); Pi và PIC giao tiếp qua **NRF24L01**. **Không** có thêm MCU tại bàn.
 
-## Mục tiêu giai đoạn này
-Chỉ **cấu trúc repo + tài liệu khởi đầu** — chưa triển khai mã ứng dụng.
+## Giai đoạn hiện tại
+**Nền tài liệu** — đã có cấu trúc `docs/` và mô tả kiến trúc/luồng ở mức khởi đầu; **chưa** triển khai mã ứng dụng, schema DB, API chi tiết hay firmware.
 
-## Tài liệu
-| Thư mục | Nội dung dự kiến |
-|---------|-------------------|
-| [docs/planning/](docs/planning/) | Kế hoạch, backlog, milestone |
-| [docs/architecture/](docs/architecture/) | Kiến trúc, ranh giới Pi/PIC, luồng chính |
-| [docs/decisions/](docs/decisions/) | Quyết định kỹ thuật (ADR) |
+## Cấu trúc thư mục
+| Đường dẫn | Nội dung |
+|-----------|----------|
+| `docs/planning/` | Brief, PRD, backlog tổng quan |
+| `docs/architecture/` | Kiến trúc, state machine đơn/bàn/thanh toán |
+| `docs/decisions/` | Nhật ký quyết định kỹ thuật |
+| `AGENTS.md` | Ràng buộc cố định và quy tắc cho agent |
 
-## Hướng dẫn agent
-Xem [AGENTS.md](AGENTS.md).
+## Liên kết nhanh
+- [Brief dự án](docs/planning/project-brief.md)
+- [PRD](docs/planning/prd.md)
+- [Kiến trúc hệ thống](docs/architecture/system-architecture.md)
