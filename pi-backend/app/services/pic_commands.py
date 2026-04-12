@@ -1,7 +1,7 @@
 """
 Xử lý lệnh từ PIC (CMD_*) — nguồn sự thật vẫn là DB trên Pi.
 
-Vòng MVP: không có NRF thật; các hàm này gọi được từ test hoặc worker RF sau này.
+Vòng MVP: không có NRF thật; các hàm này gọi được từ test, **HTTP dev** (`/api/v1/dev/...` khi `PI_DEBUG=1`), hoặc worker RF sau này.
 Trả về dict đơn giản mô phỏng payload ACK (snapshot ngắn cho LCD).
 """
 

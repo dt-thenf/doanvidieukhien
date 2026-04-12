@@ -1,17 +1,33 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+
+_DEFAULT_CORS = (
+    "http://localhost:5173,http://127.0.0.1:5173,"
+    "http://localhost:5174,http://127.0.0.1:5174"
+)
+
+
+def _env_debug() -> bool:
+    return os.getenv("PI_DEBUG", "").lower() in ("1", "true", "yes")
+
+
+def _env_database_url() -> str:
+    return os.getenv("PI_DATABASE_URL", "sqlite:///./data/restaurant.db")
+
+
+def _env_cors_origins() -> str:
+    return os.getenv("PI_CORS_ORIGINS", _DEFAULT_CORS)
 
 
 @dataclass(frozen=True)
 class Settings:
+    """Đọc biến môi trường lúc **tạo instance** (không cache lúc import module)."""
+
     app_name: str = "Pi Restaurant API"
-    debug: bool = os.getenv("PI_DEBUG", "").lower() in ("1", "true", "yes")
-    database_url: str = os.getenv("PI_DATABASE_URL", "sqlite:///./data/restaurant.db")
-    cors_origins: str = os.getenv(
-        "PI_CORS_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174",
-    )
+    debug: bool = field(default_factory=_env_debug)
+    database_url: str = field(default_factory=_env_database_url)
+    cors_origins: str = field(default_factory=_env_cors_origins)
 
 
 def get_settings() -> Settings:

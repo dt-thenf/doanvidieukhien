@@ -1,7 +1,10 @@
 # Schema cơ sở dữ liệu — pi-backend (SQLite + SQLModel)
 
-**Trạng thái:** MVP demo local — `create_all` khi khởi động, **chưa** bắt buộc Alembic.  
-**Nguồn sự thật nghiệp vụ:** Pi backend; khớp `docs/decisions/decision-log.md` (D-16–D-18), `.stitch/DESIGN.md` (trạng thái hiển thị), `restaurant-pi-pic/docs/architecture/pi-pic-protocol.md` (`total_minor` VND nguyên).
+**Trạng thái:** MVP demo local — `create_all` khi khởi động, **chưa** bắt buộc Alembic.
+
+**Nguồn sự thật (góc DB):** mô tả bảng/trường trong file này phải khớp **mã** `pi-backend/app/models/`. **Quyết định** (1 bàn = 1 order active, `total_minor` VND, …) lấy từ `docs/decisions/decision-log.md`. **API & luồng HTTP** xem `api-contract.md`, `pi-backend-flow.md` và OpenAPI `/docs`.
+
+**Tham chiếu thiết kế / RF:** `.stitch/DESIGN.md` (trạng thái hiển thị UI), `restaurant-pi-pic/docs/architecture/pi-pic-protocol.md` (`total_minor` VND nguyên trên payload).
 
 ## Quy ước chung
 

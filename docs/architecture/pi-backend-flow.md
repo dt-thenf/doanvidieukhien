@@ -2,6 +2,8 @@
 
 **Phạm vi:** HTTP + SQLite trên Pi; **chưa** NRF thật. Bám `restaurant-pi-pic/docs/architecture/golden-demo-flow.md`, `event-mapping.md`, `decision-log.md` (D-16–D-19).
 
+**Nguồn sự thật (góc luồng):** file này mô tả **hành vi** tổng thể; chi tiết endpoint (kể cả **dev-only**) xem `api-contract.md` + `/docs`. Schema bảng xem `db-schema.md`.
+
 ## Khởi động
 
 1. `uvicorn app.main:app` → `lifespan` gọi `init_db` (SQLite `create_all`).  
@@ -29,6 +31,10 @@
 | `CMD_KITCHEN_DONE` | `apply_kitchen_done` | `IN_KITCHEN` → `DONE` |
 | `CMD_COUNTER_LOOKUP` | `apply_counter_lookup` | Đọc snapshot `total_minor`, trạng thái thanh toán (lookup mặc định theo `table_id` — D-17) |
 | `CMD_COUNTER_PAID` | `apply_counter_paid` | `Payment` → `PAID`, bàn → `SETTLED` |
+
+### Dev local (`PI_DEBUG=1`)
+
+- **`POST /api/v1/dev/tables/{table_id}/kitchen-done`:** gọi `apply_kitchen_done` cho đơn **active** của bàn — chỉ để test/Swagger, **không** thay PIC thật trên production.
 
 ## Admin reset bàn
 
