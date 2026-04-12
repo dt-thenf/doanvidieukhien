@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react'
+import { ImageOff, Plus } from 'lucide-react'
 import { formatVnd } from '@/lib/money'
 import { DishTag } from '@/components/DishTag'
 import { cn } from '@/lib/utils'
@@ -27,12 +27,18 @@ export function MenuItemCard({
   return (
     <article className={cn('flex flex-col gap-3', className)}>
       <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-muted">
-        <img
-          src={imageUrl}
-          alt={imageAlt}
-          className="size-full object-cover"
-          loading="lazy"
-        />
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={imageAlt}
+            className="size-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center text-muted-foreground">
+            <ImageOff className="size-12" strokeWidth={1.25} aria-hidden />
+          </div>
+        )}
       </div>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 space-y-1">
