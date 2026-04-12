@@ -1,5 +1,26 @@
 # AGENTS.md — Hướng dẫn cho AI / developer
 
+## Project working mode
+
+This project is MCP-first.
+
+Always prefer using connected MCP tools when relevant:
+- GitHub MCP for repo context, issues, PRs, and change tracking
+- Notion MCP for architecture docs, decision log, roadmap, and task context — **entry point:** trang **[00_Control_Tower](https://www.notion.so/340278a6c1588185a1a2d0f4e4b0b739)** (đọc trước mỗi phiên chat mới khi cần vào guồng nhanh).
+
+Do not assume local-only workflow when an MCP-backed source of truth exists.
+
+Before major implementation:
+1. **Notion MCP:** `fetch` trang **00_Control_Tower** (current phase, source of truth docs, active issues, next milestone, implementation constraints).
+2. Read the latest relevant Notion spec/decision log (chi tiết theo link/đề cập từ Control Tower nếu có).
+3. Check related GitHub issues/PR context.
+4. Then modify code.
+
+Do not create parallel sources of truth outside:
+- docs in repo
+- Notion workspace
+- GitHub issues/PRs
+
 ## Ràng buộc cố định (không được thay đổi)
 - **Một** vi điều khiển **PIC16F887** cho toàn hệ thống; **không** thêm MCU tại từng bàn.
 - **Raspberry Pi** là trung tâm: web, cơ sở dữ liệu, logic nghiệp vụ (nguồn sự thật).

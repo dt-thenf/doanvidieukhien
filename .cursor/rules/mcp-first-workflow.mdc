@@ -1,0 +1,12 @@
+---
+description: MCP-first workflow — Notion + GitHub before major changes
+alwaysApply: true
+---
+
+# MCP-first workflow
+
+This repository uses an MCP-first workflow.
+
+First fetch Notion page **00_Control_Tower** for phase, SoT, issues, milestone, and constraints; then consult other Notion specs/decision logs and GitHub MCP for repo/task context before proposing major changes.
+
+Do not ask whether to use MCP; assume MCP is the default path.
