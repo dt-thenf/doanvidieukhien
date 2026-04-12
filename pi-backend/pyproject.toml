@@ -1,0 +1,18 @@
+[project]
+name = "pi-backend"
+version = "0.1.0"
+description = "Backend FastAPI + SQLModel + SQLite cho demo Pi (đồ án nhà hàng chay QR)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.110,<1",
+  "uvicorn[standard]>=0.27,<1",
+  "sqlmodel>=0.0.16,<1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9", "httpx>=0.27,<1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
