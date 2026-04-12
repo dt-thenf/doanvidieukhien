@@ -2,7 +2,7 @@
 
 **Phạm vi:** HTTP + SQLite trên Pi; **chưa** NRF thật. Bám `restaurant-pi-pic/docs/architecture/golden-demo-flow.md`, `event-mapping.md`, `decision-log.md` (D-16–D-19).
 
-**Nguồn sự thật (góc luồng):** file này mô tả **hành vi** tổng thể; chi tiết endpoint (kể cả **dev-only**) xem `api-contract.md` + `/docs`. Schema bảng xem `db-schema.md`.
+**Nguồn sự thật (góc luồng):** file này mô tả **hành vi** tổng thể; chi tiết endpoint (kể cả **dev-only**) xem `api-contract.md` + `/docs`. Schema bảng xem `db-schema.md`. **Ingress PIC** (parse → lệnh typed → domain) xem `pic-ingress.md`.
 
 ## Khởi động
 
@@ -26,16 +26,18 @@
 
 ## Bếp / quầy (PIC → Pi) — code sẵn, chưa RF
 
-| Lệnh | Hàm | Tác động DB (tóm tắt) |
-|------|-----|------------------------|
+**Điểm vào thống nhất:** `handle_pic_ingress` (`app/services/pic_ingress/service.py`) nhận `PicIngressIn(command, table_code)` rồi gọi bảng sau (không lặp logic nghiệp vụ).
+
+| Lệnh | Hàm domain | Tác động DB (tóm tắt) |
+|------|------------|------------------------|
 | `CMD_KITCHEN_DONE` | `apply_kitchen_done` | `IN_KITCHEN` → `DONE` |
 | `CMD_COUNTER_LOOKUP` | `apply_counter_lookup` | Đọc snapshot `total_minor`, trạng thái thanh toán (lookup mặc định theo `table_id` — D-17) |
 | `CMD_COUNTER_PAID` | `apply_counter_paid` | `Payment` → `PAID`, bàn → `SETTLED` |
 
 ### Dev local (`PI_DEBUG=1`)
 
-- **`POST /api/v1/dev/tables/{table_id}/kitchen-done`:** gọi `apply_kitchen_done` cho đơn **active** của bàn — test/Swagger/UI E2E, **không** thay PIC thật trên production.
-- **`POST /api/v1/dev/tables/{table_id}/counter-paid`:** gọi `apply_counter_paid` — giả **`CMD_COUNTER_PAID`** (quầy đã thu); chỉ khi `Payment` đang **REQUESTED**. Trên bản thật, bước này do **PIC quầy** sau khi nhân viên xác nhật; web admin **không** là chốt tiền chính.
+- **`POST /api/v1/dev/tables/{table_id}/kitchen-done`:** gọi `handle_pic_ingress` với `CMD_KITCHEN_DONE` (cùng đường với RF sau này).
+- **`POST /api/v1/dev/tables/{table_id}/counter-paid`:** gọi `handle_pic_ingress` với `CMD_COUNTER_PAID` — giả quầy đã thu; chỉ khi `Payment` đang **REQUESTED**. Trên bản thật, bước này do **PIC quầy**; web admin **không** là chốt tiền chính.
 
 ## Admin reset bàn
 
@@ -45,4 +47,4 @@
 
 - **Tiền:** mọi tổng/giá là **VND nguyên** (D-18).  
 - **Web admin:** chỉ đọc hàng chờ thanh toán; không thay PIC chốt tiền.  
-- **Tích hợp sau:** worker NRF gọi `pic_commands` + thay `StubPicBridge` bằng gửi frame `EVT_*` thật.
+- **Tích hợp sau:** worker NRF parse gói → `PicIngressIn` → `handle_pic_ingress`; thay `StubPicBridge` bằng gửi frame `EVT_*` thật.

@@ -1,7 +1,9 @@
 """
 Xử lý lệnh từ PIC (CMD_*) — nguồn sự thật vẫn là DB trên Pi.
 
-Vòng MVP: không có NRF thật; các hàm này gọi được từ test, **HTTP dev** (`/api/v1/dev/...` khi `PI_DEBUG=1`), hoặc worker RF sau này.
+Điểm vào thống nhất từ HTTP dev / mock / (sau này) worker NRF: :mod:`app.services.pic_ingress`
+(parse gói → :class:`~app.services.pic_ingress.types.PicIngressIn` → ``handle_pic_ingress`` → các ``apply_*`` ở đây).
+
 Trả về dict đơn giản mô phỏng payload ACK (snapshot ngắn cho LCD).
 """
 

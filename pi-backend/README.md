@@ -85,4 +85,5 @@ pytest -q
 ## Stub Pi ↔ PIC
 
 - `app/services/pic_bridge.py` — gửi sự kiện (stub + retry ngủ 120ms).  
-- `app/services/pic_commands.py` — xử lý `CMD_KITCHEN_DONE`, `CMD_COUNTER_LOOKUP`, `CMD_COUNTER_PAID`. Trên HTTP (dev): **`kitchen-done`** và **`counter-paid`** khi `PI_DEBUG=1`; `CMD_COUNTER_LOOKUP` chưa có HTTP dev trong MVP này.
+- `app/services/pic_commands.py` — xử lý `CMD_KITCHEN_DONE`, `CMD_COUNTER_LOOKUP`, `CMD_COUNTER_PAID`.  
+- `app/services/pic_ingress/` — **ingress** thống nhất: parse (ví dụ JSON mock) → `handle_pic_ingress` → cùng các `apply_*` ở trên; HTTP dev chỉ gọi ingress. Chi tiết: `docs/architecture/pic-ingress.md`.

@@ -1,7 +1,7 @@
 """
 Route chỉ dùng khi PI_DEBUG=1 — giả lập PIC để test local (không bật trên Pi production).
 
-Không thay kiến trúc: gọi cùng `pic_commands` như khi PIC gửi CMD_* qua RF.
+Luồng nghiệp vụ: HTTP → ``pic_ingress.handle_pic_ingress`` → ``pic_commands.apply_*`` (cùng đường với RF sau này).
 """
 
 from __future__ import annotations
@@ -12,10 +12,35 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 from app.api.deps import get_db_session
-from app.services.order_service import get_table_by_code
-from app.services.pic_commands import apply_counter_paid, apply_kitchen_done
+from app.services.pic_ingress import (
+    PicIngressCommand,
+    PicIngressIn,
+    handle_pic_ingress,
+)
 
 router = APIRouter(prefix="/dev", tags=["dev-only"])
+
+
+def _raise_ingress_http(result: dict) -> None:
+    if result.get("ack"):
+        return
+    err = result.get("err")
+    if err == "TABLE_NOT_FOUND":
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "TABLE_NOT_FOUND", "message": "Không có bàn này"},
+        )
+    if err == "NOT_FOUND":
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Không có bàn hoặc đơn active"},
+        )
+    if err == "NO_ACTIVE_ORDER":
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "NO_ACTIVE_ORDER", "message": "Bàn không có đơn active"},
+        )
+    raise HTTPException(status_code=400, detail=result)
 
 
 @router.post("/tables/{table_id}/kitchen-done")
@@ -29,17 +54,12 @@ def dev_kitchen_done(
     - Đơn `IN_KITCHEN` → `DONE`.
     - Nếu đã `DONE` / trạng thái khác: trả idempotent (ack) giống `pic_commands`.
     """
-    t = get_table_by_code(session, table_id)
-    if not t:
-        raise HTTPException(status_code=404, detail={"code": "TABLE_NOT_FOUND", "message": "Không có bàn này"})
-    if t.active_order_id is None:
-        raise HTTPException(
-            status_code=400,
-            detail={"code": "NO_ACTIVE_ORDER", "message": "Bàn không có đơn active"},
-        )
-    result = apply_kitchen_done(session, order_id=t.active_order_id)
+    result = handle_pic_ingress(
+        session,
+        PicIngressIn(command=PicIngressCommand.CMD_KITCHEN_DONE, table_code=table_id),
+    )
     if not result.get("ack"):
-        raise HTTPException(status_code=400, detail=result)
+        _raise_ingress_http(result)
     return result
 
 
@@ -55,13 +75,10 @@ def dev_counter_paid(
     - Đã `PAID`: idempotent (ack).
     - Không thay web admin làm chốt tiền thật; đây chỉ là shortcut test local khi `PI_DEBUG=1`.
     """
-    t = get_table_by_code(session, table_id)
-    if not t:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "TABLE_NOT_FOUND", "message": "Không có bàn này"},
-        )
-    result = apply_counter_paid(session, table_code=table_id)
+    result = handle_pic_ingress(
+        session,
+        PicIngressIn(command=PicIngressCommand.CMD_COUNTER_PAID, table_code=table_id),
+    )
     if not result.get("ack"):
-        raise HTTPException(status_code=400, detail=result)
+        _raise_ingress_http(result)
     return result

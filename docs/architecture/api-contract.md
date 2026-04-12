@@ -5,7 +5,7 @@
 | Loại | Nguồn chính |
 |------|-------------|
 | **Quyết định kiến trúc / ràng buộc** | `docs/decisions/decision-log.md` (+ mirror `restaurant-pi-pic/docs/decisions/decision-log.md` khi có) |
-| **Mô tả DB & luồng nghiệp vụ** | `docs/architecture/db-schema.md`, `docs/architecture/pi-backend-flow.md` |
+| **Mô tả DB & luồng nghiệp vụ** | `docs/architecture/db-schema.md`, `docs/architecture/pi-backend-flow.md`, `docs/architecture/pic-ingress.md` |
 | **Danh sách endpoint & payload (tóm tắt)** | File này + **OpenAPI** tại `/docs` khi chạy server (khớp mã `pi-backend/app/`) |
 
 Nếu mâu thuẫn: ưu tiên **decision-log** cho policy; **mã + OpenAPI** cho chi tiết triển khai; cập nhật lại các file `docs/architecture/*.md` khi đổi API có chủ đích.
@@ -67,7 +67,7 @@ HTTP 4xx với `detail`: `{ "code": "...", "message": "..." }` — ví dụ `TAB
 
 - Khi **`PI_DEBUG` tắt:** các route này **không được mount** → client nhận **404** (không lộ surface dev trên bản chạy “gần production”).
 - **Không** dùng trên Pi demo công khai / bảo vệ nếu không chủ đích mở debug.
-- Mã xử lý nghiệp vụ giống RF: `kitchen-done` → `apply_kitchen_done`; `counter-paid` → `apply_counter_paid` trong `pic_commands.py`.
+- Mã xử lý nghiệp vụ giống RF: HTTP dev gọi `handle_pic_ingress` → `apply_kitchen_done` / `apply_counter_paid` trong `pic_commands.py` (xem `pic-ingress.md`).
 
 ## Hệ thống
 
