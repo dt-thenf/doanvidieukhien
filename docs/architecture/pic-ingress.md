@@ -1,8 +1,8 @@
-# PIC / NRF ingress — Pi backend (A05.2)
+# PIC / NRF ingress — Pi backend (A05.2 + A06)
 
 **Mục đích:** một điểm vào **duy nhất** cho lệnh từ PIC (sau khi giải mã gói RF hoặc mock), gọi thẳng các hàm domain hiện có trong `pic_commands.py` — **không** nhân đôi nghiệp vụ với route HTTP dev.
 
-**Nguồn sự thật:** mã `app/services/pic_ingress/` + `pic_commands.py`; HTTP `POST /api/v1/dev/...` (khi `PI_DEBUG=1`) chỉ là **mặt nạ** gọi `handle_pic_ingress`.
+**Nguồn sự thật:** mã `app/services/pic_ingress/` + `pic_commands.py`; **giao thức binary** `docs/architecture/pi-pic-protocol.md`; HTTP `POST /api/v1/dev/...` (khi `PI_DEBUG=1`) chỉ là **mặt nạ** gọi `handle_pic_ingress`.
 
 ## Luồng xử lý
 
@@ -21,9 +21,9 @@ flowchart LR
 | `app/services/pic_ingress/types.py` | `PicIngressCommand`, `PicIngressIn` |
 | `app/services/pic_ingress/service.py` | `handle_pic_ingress` — resolve bàn (kitchen) + delegate `apply_*` |
 | `app/services/pic_ingress/nrf_json.py` | `decode_pic_command_json` — mock / lab (UTF-8 JSON) |
+| `app/services/pic_ingress/nrf_binary.py` | `decode_pic_command_binary` — frame 32 byte `v1` → `PicIngressIn` |
+| `app/services/pic_ingress/worker.py` | `handle_nrf_ingress_frame`, `run_ingress_loop` (SPI/queue inject) |
 | `app/api/v1/dev.py` | HTTP dev → `PicIngressIn` + `handle_pic_ingress` |
-
-Worker NRF thật (giai đoạn sau) có thể thêm `nrf_binary.py` (hoặc tương đương) parse header + payload `pi-pic-protocol.md`, rồi tạo cùng `PicIngressIn`.
 
 ## Payload tối thiểu (sau parse)
 
@@ -56,3 +56,5 @@ Chi tiết HTTP mapping (mã 404/400) chỉ thuộc `dev.py`, không nằm trong
 ## Kiểm thử
 
 - `tests/test_pic_ingress.py` — decode JSON, map lệnh, chuyển trạng thái không hợp lệ (`PAYMENT_NOT_REQUESTED`, `NO_ACTIVE_ORDER`, …).
+- `tests/test_nrf_binary.py` — decode binary + `handle_nrf_ingress_frame`.
+- Checklist tích hợp: `docs/planning/A06-test-checklist.md`.

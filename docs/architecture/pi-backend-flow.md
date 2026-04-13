@@ -1,8 +1,8 @@
 # Luồng xử lý pi-backend (MVP local)
 
-**Phạm vi:** HTTP + SQLite trên Pi; **chưa** NRF thật. Bám `restaurant-pi-pic/docs/architecture/golden-demo-flow.md`, `event-mapping.md`, `decision-log.md` (D-16–D-19).
+**Phạm vi:** HTTP + SQLite trên Pi; NRF thật dùng **cùng** ingress (binary) như mô tả dưới. Bám `restaurant-pi-pic/docs/architecture/golden-demo-flow.md`, `event-mapping.md`, `decision-log.md` (D-16–D-19).
 
-**Nguồn sự thật (góc luồng):** file này mô tả **hành vi** tổng thể; chi tiết endpoint (kể cả **dev-only**) xem `api-contract.md` + `/docs`. Schema bảng xem `db-schema.md`. **Ingress PIC** (parse → lệnh typed → domain) xem `pic-ingress.md`.
+**Nguồn sự thật (góc luồng):** file này mô tả **hành vi** tổng thể; chi tiết endpoint (kể cả **dev-only**) xem `api-contract.md` + `/docs`. Schema bảng xem `db-schema.md`. **Ingress PIC** (parse → lệnh typed → domain) xem `pic-ingress.md`. **Binary wire:** `pi-pic-protocol.md`.
 
 ## Khởi động
 
@@ -47,4 +47,4 @@
 
 - **Tiền:** mọi tổng/giá là **VND nguyên** (D-18).  
 - **Web admin:** chỉ đọc hàng chờ thanh toán; không thay PIC chốt tiền.  
-- **Tích hợp sau:** worker NRF parse gói → `PicIngressIn` → `handle_pic_ingress`; thay `StubPicBridge` bằng gửi frame `EVT_*` thật.
+- **Tích hợp NRF:** `handle_nrf_ingress_frame` (`pic_ingress/worker.py`) đọc 32 byte → `decode_pic_command_binary` → `handle_pic_ingress`; SPI/IRQ nối vào `run_ingress_loop`. Thay `StubPicBridge` bằng gửi frame `EVT_*` thật khi encoder Pi→PIC sẵn sàng.

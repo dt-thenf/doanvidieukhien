@@ -86,4 +86,4 @@ pytest -q
 
 - `app/services/pic_bridge.py` — gửi sự kiện (stub + retry ngủ 120ms).  
 - `app/services/pic_commands.py` — xử lý `CMD_KITCHEN_DONE`, `CMD_COUNTER_LOOKUP`, `CMD_COUNTER_PAID`.  
-- `app/services/pic_ingress/` — **ingress** thống nhất: parse (ví dụ JSON mock) → `handle_pic_ingress` → cùng các `apply_*` ở trên; HTTP dev chỉ gọi ingress. Chi tiết: `docs/architecture/pic-ingress.md`.
+- `app/services/pic_ingress/` — **ingress** thống nhất: parse JSON mock **hoặc** frame binary 32 byte (`nrf_binary` + `worker`) → `handle_pic_ingress` → cùng các `apply_*` ở trên; HTTP dev chỉ gọi ingress. Chi tiết: `docs/architecture/pic-ingress.md`, wire format: `docs/architecture/pi-pic-protocol.md`.
