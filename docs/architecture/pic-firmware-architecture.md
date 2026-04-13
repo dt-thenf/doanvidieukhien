@@ -38,6 +38,10 @@ Nằm trong `firmware/pic16f887/`:
 
 - `nrf_bridge.*`: TX-first qua MSSP SPI (PIC16F887). Hỗ trợ init NRF + gửi payload 32 byte (polling STATUS), **chưa** làm RX/IRQ flow.
 
+## Bring-up NRF RX + ACK cơ bản (A06.4)
+
+- `nrf_bridge.*`: polling RX (`STATUS.RX_DR`), đọc payload 32 byte, trả qua `nrf_bridge_try_recv()` để `app_state` parse `ACK/NACK/PONG/EVT_*`.
+
 ## Luồng dữ liệu (tối thiểu)
 
 - **PIC → Pi (CMD)**:

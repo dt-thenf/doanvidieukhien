@@ -73,11 +73,22 @@ static void handle_rx_frame(const uint8_t *rx32) {
             lcd_show_status("PONG");
             break;
         case PI_PIC_MSG_ACK:
-            /* Matching SEQ is required for CMD_*; we keep it permissive in foundation. */
-            on_ack(&f);
+            /* ACK/NACK should match last TX seq when waiting. */
+            if (g.state == APP_STATE_WAIT_ACK) {
+                uint8_t last_seq = g.last_tx[2];
+                if (f.seq == last_seq) on_ack(&f);
+            } else {
+                /* not waiting: still mark link up */
+                g.link = LINK_UP;
+            }
             break;
         case PI_PIC_MSG_NACK:
-            on_nack(&f);
+            if (g.state == APP_STATE_WAIT_ACK) {
+                uint8_t last_seq = g.last_tx[2];
+                if (f.seq == last_seq) on_nack(&f);
+            } else {
+                g.link = LINK_UP;
+            }
             break;
         case PI_PIC_MSG_EVT_ORDER_NEW:
             on_evt_order_new(&f);

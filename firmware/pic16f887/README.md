@@ -53,6 +53,12 @@ Lưu ý phần cứng:
   - `nrf_bridge_send(buf, 32)` ghi TX payload và pulse CE để phát (poll `STATUS`)
 - Chưa làm RX/IRQ/ACK đầy đủ ở vòng này.
 
+## NRF RX + ACK cơ bản (A06.4)
+
+- `nrf_bridge_tick()` poll `STATUS.RX_DR` và đọc **RX payload 32 byte** (buffer 1 frame) để `app_state` xử lý.
+- `nrf_bridge_try_recv()` trả frame nhận được (non-blocking).
+- NRF ở **PRX listen mặc định**; khi gửi thì chuyển sang PTX, phát xong quay lại PRX.
+
 ### Cần chuẩn bị để test phần cứng
 
 - NRF24L01 wiring đúng pin map:

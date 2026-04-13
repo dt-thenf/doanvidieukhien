@@ -41,6 +41,11 @@ Mỗi mode dùng chung một state machine transaction tối thiểu:
 - Ở vòng TX-first, `nrf_bridge_send()` thực hiện **gửi payload 32 byte** và polling `STATUS` để biết **TX thành công/thất bại**.
 - Chưa triển khai RX/IRQ/ACK đầy đủ; state machine vẫn giữ `WAIT_ACK` để nối tiếp ở vòng sau (RX-first/ACK).
 
+### RX + ACK cơ bản (A06.4)
+
+- `nrf_bridge_tick()` poll RX và đưa frame lên `app_state` qua `nrf_bridge_try_recv()`.
+- `ACK/NACK` chỉ kết thúc `WAIT_ACK` khi **`SEQ` khớp** frame vừa gửi.
+
 ## 3) Tham số retry (demo)
 
 Theo `docs/decisions/decision-log.md` **D-2026-04-12-03**:

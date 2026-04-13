@@ -27,8 +27,10 @@
 /* NRF24 commands */
 #define NRF_CMD_R_REGISTER      0x00u
 #define NRF_CMD_W_REGISTER      0x20u
+#define NRF_CMD_R_RX_PAYLOAD    0x61u
 #define NRF_CMD_W_TX_PAYLOAD    0xA0u
 #define NRF_CMD_FLUSH_TX        0xE1u
+#define NRF_CMD_FLUSH_RX        0xE2u
 #define NRF_CMD_NOP             0xFFu
 
 /* NRF24 registers */
@@ -51,6 +53,10 @@
 #define NRF_STATUS_MAX_RT       (1u << 4)
 
 static bool g_hw_ready = false;
+
+/* Single-frame RX buffer (beginner-friendly) */
+static volatile bool g_rx_has_frame = false;
+static uint8_t g_rx_frame[32];
 
 /* ===== SPI (MSSP) ===== */
 static void spi_init_mssp(void) {
@@ -125,20 +131,32 @@ static void nrf_write_tx_payload(const uint8_t *buf, uint8_t n) {
     csn_high();
 }
 
+static void nrf_read_rx_payload(uint8_t *out, uint8_t n) {
+    uint8_t i;
+    csn_low();
+    spi_xfer(NRF_CMD_R_RX_PAYLOAD);
+    for (i = 0; i < n; i++) out[i] = spi_xfer(NRF_CMD_NOP);
+    csn_high();
+}
+
+static void nrf_flush_rx(void) {
+    nrf_cmd(NRF_CMD_FLUSH_RX);
+}
+
 static void nrf_clear_irq_flags(void) {
     /* Clear RX_DR/TX_DS/MAX_RT by writing 1s to those bits */
     nrf_write_reg(NRF_REG_STATUS, (uint8_t)(NRF_STATUS_RX_DR | NRF_STATUS_TX_DS | NRF_STATUS_MAX_RT));
 }
 
-static void nrf_tx_init_defaults(void) {
-    /* Minimal, demo-friendly defaults */
+static void nrf_init_common(void) {
+    /* Common, demo-friendly defaults */
     static const uint8_t addr[5] = {0xE7, 0xE7, 0xE7, 0xE7, 0xE7};
 
     ce_low();
     csn_high();
     __delay_ms(5);
 
-    /* Disable auto-ack/retry in HW (PIC handles retry at app level later) */
+    /* Disable auto-ack/retry in HW (PIC handles retry at app level) */
     nrf_write_reg(NRF_REG_EN_AA, 0x00);
     nrf_write_reg(NRF_REG_SETUP_RETR, 0x00);
 
@@ -157,10 +175,30 @@ static void nrf_tx_init_defaults(void) {
 
     nrf_clear_irq_flags();
     nrf_cmd(NRF_CMD_FLUSH_TX);
+    nrf_cmd(NRF_CMD_FLUSH_RX);
 
-    /* CONFIG: CRC enabled (2 bytes), PWR_UP=1, PRIM_RX=0 */
-    nrf_write_reg(NRF_REG_CONFIG, 0x0Eu);
-    __delay_ms(2); /* PWR_UP settling */
+    /* Power up + CRC, keep PRIM_RX set later */
+    nrf_write_reg(NRF_REG_CONFIG, 0x0Eu); /* PWR_UP=1, EN_CRC=1, CRCO=1, PRIM_RX=0 */
+    __delay_ms(2);
+}
+
+static void nrf_set_prx(bool prx) {
+    uint8_t cfg = nrf_read_reg(NRF_REG_CONFIG);
+    if (prx) cfg |= 0x01u;  /* PRIM_RX */
+    else cfg &= (uint8_t)~0x01u;
+    nrf_write_reg(NRF_REG_CONFIG, cfg);
+    __delay_us(150);
+}
+
+static void nrf_listen_start(void) {
+    nrf_clear_irq_flags();
+    nrf_set_prx(true);
+    ce_high();
+}
+
+static void nrf_listen_stop(void) {
+    ce_low();
+    nrf_set_prx(false);
 }
 
 static bool nrf_tx_send_32(const uint8_t *buf32) {
@@ -169,7 +207,8 @@ static bool nrf_tx_send_32(const uint8_t *buf32) {
 
     if (!g_hw_ready) return false;
 
-    ce_low();
+    /* Switch to PTX for transmission */
+    nrf_listen_stop();
     nrf_clear_irq_flags();
     nrf_cmd(NRF_CMD_FLUSH_TX);
 
@@ -185,15 +224,19 @@ static bool nrf_tx_send_32(const uint8_t *buf32) {
         status = nrf_read_reg(NRF_REG_STATUS);
         if (status & NRF_STATUS_TX_DS) {
             nrf_clear_irq_flags();
+            /* Back to PRX listen */
+            nrf_listen_start();
             return true;
         }
         if (status & NRF_STATUS_MAX_RT) {
             nrf_clear_irq_flags();
             nrf_cmd(NRF_CMD_FLUSH_TX);
+            nrf_listen_start();
             return false;
         }
         __delay_us(50);
     }
+    nrf_listen_start();
     return false;
 }
 
@@ -203,12 +246,27 @@ void nrf_bridge_init(void) {
     csn_high();
 
     spi_init_mssp();
-    nrf_tx_init_defaults();
+    nrf_init_common();
     g_hw_ready = true;
+
+    /* Default: PRX listen (để nhận EVT/ACK từ Pi) */
+    nrf_listen_start();
 }
 
 void nrf_bridge_tick(void) {
-    /* TX-first: nothing periodic required */
+    /* Poll RX: if RX_DR set, read payload 32 bytes into buffer */
+    uint8_t status;
+    if (!g_hw_ready) return;
+    if (g_rx_has_frame) return; /* keep single frame until consumed */
+
+    status = nrf_read_reg(NRF_REG_STATUS);
+    if (status & NRF_STATUS_RX_DR) {
+        nrf_read_rx_payload(g_rx_frame, 32);
+        nrf_clear_irq_flags();
+        /* If multiple packets queued, keep it simple: flush remaining */
+        nrf_flush_rx();
+        g_rx_has_frame = true;
+    }
 }
 
 bool nrf_bridge_send(const uint8_t *buf, uint8_t len) {
@@ -218,9 +276,13 @@ bool nrf_bridge_send(const uint8_t *buf, uint8_t len) {
 }
 
 bool nrf_bridge_try_recv(uint8_t *out, uint8_t len) {
-    (void)out;
-    (void)len;
-    /* RX/IRQ flow is out of scope for A06.3 */
-    return false;
+    uint8_t i;
+    if (!out) return false;
+    if (len != 32u) return false;
+    if (!g_rx_has_frame) return false;
+
+    for (i = 0; i < 32u; i++) out[i] = g_rx_frame[i];
+    g_rx_has_frame = false;
+    return true;
 }
 
