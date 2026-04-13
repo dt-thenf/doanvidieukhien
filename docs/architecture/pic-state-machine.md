@@ -36,6 +36,11 @@ Mỗi mode dùng chung một state machine transaction tối thiểu:
   - Nếu hết timeout: retry (tối đa 3 lần)
   - Hết retry: `LINK_DOWN`, quay lại `IDLE`
 
+### TX-first (A06.3)
+
+- Ở vòng TX-first, `nrf_bridge_send()` thực hiện **gửi payload 32 byte** và polling `STATUS` để biết **TX thành công/thất bại**.
+- Chưa triển khai RX/IRQ/ACK đầy đủ; state machine vẫn giữ `WAIT_ACK` để nối tiếp ở vòng sau (RX-first/ACK).
+
 ## 3) Tham số retry (demo)
 
 Theo `docs/decisions/decision-log.md` **D-2026-04-12-03**:

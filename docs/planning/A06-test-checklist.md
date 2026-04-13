@@ -30,3 +30,4 @@
 - [ ] Nút `MODE` chuyển Bếp/Quầy, không bounce gây đổi mode liên tục.
 - [ ] Keypad 4×4 scan cơ bản: nhấn `1 2 3` thấy chuỗi tích luỹ trên LCD quầy; `#` clear; `*` backspace.
 - [ ] LCD 4-bit init + clear + print: khi reset thấy “PIC KITCHEN/COUNTER BOOT”; nhấn MODE đổi màn hình hiển thị “READY”.
+- [ ] NRF TX-first: nhấn `K_DONE` / `A` / `B` tạo frame 32 byte và `nrf_bridge_send()` trả true khi TX_DS (poll STATUS).

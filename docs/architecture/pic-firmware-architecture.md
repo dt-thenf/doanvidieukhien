@@ -34,6 +34,10 @@ Nằm trong `firmware/pic16f887/`:
 - `lcd_driver.*`: HD44780 4-bit chạy thật (2 LCD share bus, 2 chân EN chọn màn bếp/quầy).
 - `keypad_driver.*`: scan 4×4 + debounce theo tick 10ms, phát event ký tự đơn giản cho `app_state`.
 
+## Bring-up NRF TX-first (A06.3)
+
+- `nrf_bridge.*`: TX-first qua MSSP SPI (PIC16F887). Hỗ trợ init NRF + gửi payload 32 byte (polling STATUS), **chưa** làm RX/IRQ flow.
+
 ## Luồng dữ liệu (tối thiểu)
 
 - **PIC → Pi (CMD)**:

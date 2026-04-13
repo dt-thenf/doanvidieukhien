@@ -45,6 +45,21 @@ Nguyên tắc: khi cần set/clear `CSN` hoặc rows, ưu tiên gọi `portb_set
 Lưu ý phần cứng:
 - Cần pull-up cho các chân **column input** nếu không có pull-up nội phù hợp (RC0/RC1/RC2/RE0).
 
+## NRF TX-first (A06.3)
+
+- `nrf_bridge.c` đã chuyển từ stub sang **TX-first**:
+  - Init SPI/MSSP (mode 0, master Fosc/16)
+  - Cấu hình NRF24 tối thiểu (PWR_UP, CRC, channel 76, 1Mbps)
+  - `nrf_bridge_send(buf, 32)` ghi TX payload và pulse CE để phát (poll `STATUS`)
+- Chưa làm RX/IRQ/ACK đầy đủ ở vòng này.
+
+### Cần chuẩn bị để test phần cứng
+
+- NRF24L01 wiring đúng pin map:
+  - SPI: `RC3/RC4/RC5`
+  - `CE=RA4`, `CSN=RB5`, `IRQ=RB0` (IRQ chưa dùng)
+- Nguồn 3.3V ổn định cho NRF (khuyến nghị có tụ decoupling gần module).
+
 ## Source of truth
 
 - **Giao thức wire**: `docs/architecture/pi-pic-protocol.md`
