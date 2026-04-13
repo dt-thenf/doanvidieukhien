@@ -21,21 +21,21 @@
  * - EN_KITCHEN: RD0
  * - EN_COUNTER: RD1
  */
-#define LCD_RS_LAT      LATDbits.LATD2
+#define LCD_RS_OUT      PORTDbits.RD2
 #define LCD_RS_TRIS     TRISDbits.TRISD2
 
-#define LCD_D4_LAT      LATDbits.LATD4
+#define LCD_D4_OUT      PORTDbits.RD4
 #define LCD_D4_TRIS     TRISDbits.TRISD4
-#define LCD_D5_LAT      LATDbits.LATD5
+#define LCD_D5_OUT      PORTDbits.RD5
 #define LCD_D5_TRIS     TRISDbits.TRISD5
-#define LCD_D6_LAT      LATDbits.LATD6
+#define LCD_D6_OUT      PORTDbits.RD6
 #define LCD_D6_TRIS     TRISDbits.TRISD6
-#define LCD_D7_LAT      LATDbits.LATD7
+#define LCD_D7_OUT      PORTDbits.RD7
 #define LCD_D7_TRIS     TRISDbits.TRISD7
 
-#define LCD_EN_K_LAT    LATDbits.LATD0
+#define LCD_EN_K_OUT    PORTDbits.RD0
 #define LCD_EN_K_TRIS   TRISDbits.TRISD0
-#define LCD_EN_C_LAT    LATDbits.LATD1
+#define LCD_EN_C_OUT    PORTDbits.RD1
 #define LCD_EN_C_TRIS   TRISDbits.TRISD1
 
 /* =========================
@@ -46,13 +46,13 @@
  *
  * Lưu ý: tránh RB6/RB7 (ICSP) để dễ nạp/debug.
  */
-#define KP_R0_LAT   LATBbits.LATB1
+#define KP_R0_OUT   PORTBbits.RB1
 #define KP_R0_TRIS  TRISBbits.TRISB1
-#define KP_R1_LAT   LATBbits.LATB2
+#define KP_R1_OUT   PORTBbits.RB2
 #define KP_R1_TRIS  TRISBbits.TRISB2
-#define KP_R2_LAT   LATBbits.LATB3
+#define KP_R2_OUT   PORTBbits.RB3
 #define KP_R2_TRIS  TRISBbits.TRISB3
-#define KP_R3_LAT   LATBbits.LATB4
+#define KP_R3_OUT   PORTBbits.RB4
 #define KP_R3_TRIS  TRISBbits.TRISB4
 
 #define KP_C0_PORT  PORTCbits.RC0
@@ -85,7 +85,7 @@
  * =========================
  * BUZZER: RE1 (output)
  */
-#define BUZZ_LAT    LATEbits.LATE1
+#define BUZZ_OUT    PORTEbits.RE1
 #define BUZZ_TRIS   TRISEbits.TRISE1
 
 /* =========================
@@ -98,13 +98,13 @@
  *
  * Control:
  * - CE:  RA4
- * - CSN: RA3
+ * - CSN: RB5 (không dùng RA3 vì giữ MCLRE=ON)
  * - IRQ: RB0/INT
  */
-#define NRF_CE_LAT     LATAbits.LATA4
+#define NRF_CE_OUT     PORTAbits.RA4
 #define NRF_CE_TRIS    TRISAbits.TRISA4
-#define NRF_CSN_LAT    LATAbits.LATA3
-#define NRF_CSN_TRIS   TRISAbits.TRISA3
+#define NRF_CSN_OUT    PORTBbits.RB5
+#define NRF_CSN_TRIS   TRISBbits.TRISB5
 
 #define NRF_IRQ_PORT   PORTBbits.RB0
 #define NRF_IRQ_TRIS   TRISBbits.TRISB0

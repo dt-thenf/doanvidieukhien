@@ -16,6 +16,7 @@ Mục tiêu vòng này: dựng **nền firmware rõ ràng theo module** cho PIC1
 
 - Firmware đã có **tick 10ms thật** bằng **Timer0 interrupt** (`timebase.*`).
 - Clock mặc định: **INTOSC 4MHz** (khớp preload Timer0).
+- **Lưu ý pin:** giữ `MCLRE = ON` nên **không dùng RA3 làm output**. Pin map hiện dùng **RB5** cho NRF `CSN` (xem `docs/architecture/pic-pin-map.md`).
 
 ## Source of truth
 

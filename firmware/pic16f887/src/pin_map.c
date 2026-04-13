@@ -32,11 +32,11 @@ void pin_map_init(void) {
     disable_analog();
 
     /* Clear latches (tránh glitch khi chuyển TRIS) */
-    LATA = 0x00;
-    LATB = 0x00;
-    LATC = 0x00;
-    LATD = 0x00;
-    LATE = 0x00;
+    PORTA = 0x00;
+    PORTB = 0x00;
+    PORTC = 0x00;
+    PORTD = 0x00;
+    PORTE = 0x00;
 
     /* LCD: outputs */
     LCD_RS_TRIS = 0;
@@ -65,14 +65,14 @@ void pin_map_init(void) {
 
     /* Buzzer: output */
     BUZZ_TRIS = 0;
-    BUZZ_LAT = 0;
+    BUZZ_OUT = 0;
 
     /* NRF control: CE/CSN outputs, IRQ input */
     NRF_CE_TRIS = 0;
     NRF_CSN_TRIS = 0;
     NRF_IRQ_TRIS = 1;
-    NRF_CE_LAT = 0;
-    NRF_CSN_LAT = 1;
+    NRF_CE_OUT = 0;
+    NRF_CSN_OUT = 1;
 
     /* Optional: enable weak pull-ups if needed (esp. keypad cols/buttons).
      * TODO: configure OPTION_REG / WPUB / IOCB according to wiring.

@@ -10,15 +10,15 @@ static uint8_t g_beep_ticks;
 
 void buzzer_init(void) {
     g_beep_ticks = 0;
-    BUZZ_LAT = 0;
+    BUZZ_OUT = 0;
 }
 
 void buzzer_tick(void) {
     if (g_beep_ticks > 0) {
         g_beep_ticks--;
-        BUZZ_LAT = 1;
+        BUZZ_OUT = 1;
     } else {
-        BUZZ_LAT = 0;
+        BUZZ_OUT = 0;
     }
 }
 

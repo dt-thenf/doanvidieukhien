@@ -18,8 +18,10 @@
 - **MISO**: RC4  
 - **MOSI**: RC5  
 - **CE**: RA4  
-- **CSN**: RA3  
+- **CSN**: RB5  
 - **IRQ**: RB0/INT
+
+> **Lưu ý:** giữ `MCLRE = ON` nên **không dùng RA3 làm output** (tránh xung đột MCLR trên một số mạch/thiết kế). Vì vậy CSN được chuyển sang RB5.
 
 ### 2) LCD (HD44780, 4-bit) — dùng chung bus
 
