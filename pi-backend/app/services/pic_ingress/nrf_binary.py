@@ -106,3 +106,31 @@ def build_cmd_counter_lookup_frame(*, seq: int, table_code: int, flags: int = 0)
 def build_cmd_counter_paid_frame(*, seq: int, table_code: int, flags: int = 0) -> bytes:
     pl = int(table_code).to_bytes(2, "little")
     return pack_frame(PROTO_VER, MsgType.CMD_COUNTER_PAID, seq, flags, pl)
+
+
+# --- Pi -> PIC frames (A06.5 RF link test) ---
+
+
+def build_pong_frame(*, seq: int, flags: int = 0) -> bytes:
+    """PONG payload empty for bring-up."""
+    return pack_frame(PROTO_VER, MsgType.PONG, seq, flags, b"")
+
+
+def build_ack_frame(*, seq: int, flags: int = 0) -> bytes:
+    """ACK payload empty for bring-up."""
+    return pack_frame(PROTO_VER, MsgType.ACK, seq, flags, b"")
+
+
+def build_nack_frame(*, seq: int, flags: int = 0) -> bytes:
+    """NACK payload empty for bring-up."""
+    return pack_frame(PROTO_VER, MsgType.NACK, seq, flags, b"")
+
+
+def build_evt_order_new_frame(*, seq: int, flags: int = 0) -> bytes:
+    """EVT_ORDER_NEW payload empty for bring-up."""
+    return pack_frame(PROTO_VER, MsgType.EVT_ORDER_NEW, seq, flags, b"")
+
+
+def build_evt_payment_pending_frame(*, seq: int, flags: int = 0) -> bytes:
+    """EVT_PAYMENT_PENDING payload empty for bring-up."""
+    return pack_frame(PROTO_VER, MsgType.EVT_PAYMENT_PENDING, seq, flags, b"")

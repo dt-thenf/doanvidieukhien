@@ -48,3 +48,11 @@
 - **Tiền:** mọi tổng/giá là **VND nguyên** (D-18).  
 - **Web admin:** chỉ đọc hàng chờ thanh toán; không thay PIC chốt tiền.  
 - **Tích hợp NRF:** `handle_nrf_ingress_frame` (`pic_ingress/worker.py`) đọc 32 byte → `decode_pic_command_binary` → `handle_pic_ingress`; SPI/IRQ nối vào `run_ingress_loop`. Thay `StubPicBridge` bằng gửi frame `EVT_*` thật khi encoder Pi→PIC sẵn sàng.
+
+## RF link test (A06.5)
+
+Để beginner test link NRF thật (chưa cần gắn DB/worker):
+
+- Chạy tool: `pi-backend/tools/rf24_link_test.py`
+  - `--listen`: nghe frame từ PIC và trả `PONG`/`ACK` (cùng `SEQ`)
+  - `--send-evt-order-new`, `--send-evt-payment-pending`: đẩy event xuống PIC (payload rỗng để test link)

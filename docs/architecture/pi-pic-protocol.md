@@ -79,6 +79,8 @@ Byte payload index 2..27 = 0. Một đơn active trên bàn (**D-16**); Pi resol
 
 Định dạng payload chi tiết cho `EVT_ORDER_NEW`, `EVT_PAYMENT_PENDING`, snapshot trong `ACK` giữ nguyên tinh thần bản trước (**order_id u32 + table_code u16** cho EVT, v.v.); encoder phía Pi sẽ bổ sung cùng module `pic_bridge` / lớp gửi khi thay stub.
 
+**Ghi chú bring-up (A06.5):** để test link RF thật, Pi có thể gửi `PONG`/`ACK`/`NACK`/`EVT_*` với **payload rỗng** (tức 28 byte padding = 0). PIC hiện tại phản ứng theo `MSG_TYPE` và `SEQ` (ACK/NACK).
+
 Quy tắc retry **`EVT_*`** tối đa một lần: **D-19**.
 
 ---

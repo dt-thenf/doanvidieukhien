@@ -17,8 +17,14 @@
 
 ## Tích hợp (lab / Pi thật)
 
-- [ ] SPI NRF: đọc đúng 32 byte từ IRQ; đưa vào `handle_nrf_ingress_frame` (không qua HTTP).
-- [ ] `SEQ` request/response: Pi trả `ACK`/`NACK` cùng `SEQ` (khi encoder Pi→PIC đã nối).
+- [ ] Pi tool RF: chạy `pi-backend/tools/rf24_link_test.py --listen` (channel 76, addr E7E7E7E7E7, payload 32, 1Mbps, auto-ack off).
+- [ ] PING/PONG: trên PIC (mode Bếp) bấm `K_NEXT` → Pi trả `PONG` cùng `SEQ` → PIC hiện “PONG”.
+- [ ] ACK cho `CMD_KITCHEN_DONE`: bấm `K_DONE` → Pi trả `ACK` cùng `SEQ` → PIC hiện “ACK”.
+- [ ] ACK cho `CMD_COUNTER_LOOKUP`: mode Quầy nhập số + `A` → Pi trả `ACK` cùng `SEQ` → PIC hiện “ACK”.
+- [ ] ACK cho `CMD_COUNTER_PAID`: mode Quầy nhập số + `B` → Pi trả `ACK` cùng `SEQ` → PIC hiện “ACK”.
+- [ ] EVT_ORDER_NEW: trên Pi chạy tool với `--send-evt-order-new` → PIC beep + LCD bếp hiện “EVT_ORDER_NEW”.
+- [ ] EVT_PAYMENT_PENDING: trên Pi chạy tool với `--send-evt-payment-pending` → PIC beep + LCD quầy hiện “EVT_PAYMENT_PENDING”.
+- [ ] SPI NRF ingress: đọc đúng 32 byte từ IRQ; đưa vào `handle_nrf_ingress_frame` (không qua HTTP) (vòng sau nếu muốn gắn DB thật).
 - [ ] End-to-end: PIC gửi `CMD_KITCHEN_DONE` → DB đơn `DONE`.  
 - [ ] PIC gửi `CMD_COUNTER_PAID` sau `Payment REQUESTED` → `PAID` + bàn `SETTLED`.
 

@@ -59,6 +59,22 @@ Lưu ý phần cứng:
 - `nrf_bridge_try_recv()` trả frame nhận được (non-blocking).
 - NRF ở **PRX listen mặc định**; khi gửi thì chuyển sang PTX, phát xong quay lại PRX.
 
+## RF link test Pi↔PIC (A06.5)
+
+Trên PIC:
+- Mode Bếp:
+  - `K_NEXT` → gửi **PING** (chờ **PONG**)
+  - `K_DONE` → gửi `CMD_KITCHEN_DONE` (chờ **ACK**)
+- Mode Quầy:
+  - Nhập số bàn + `A` → gửi `CMD_COUNTER_LOOKUP` (chờ **ACK**)
+  - Nhập số bàn + `B` → gửi `CMD_COUNTER_PAID` (chờ **ACK**)
+
+Trên Pi:
+- Chạy tool listen/ack: `pi-backend/tools/rf24_link_test.py --listen`
+- Đẩy event xuống PIC:
+  - `--send-evt-order-new`
+  - `--send-evt-payment-pending`
+
 ### Cần chuẩn bị để test phần cứng
 
 - NRF24L01 wiring đúng pin map:

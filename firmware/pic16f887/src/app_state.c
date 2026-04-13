@@ -130,8 +130,12 @@ static void tick_inputs_and_actions(void) {
     /* Kitchen: DONE button -> CMD_KITCHEN_DONE(table_code) */
     if (g.mode == APP_MODE_KITCHEN) {
         if (buttons_was_pressed(BTN_ID_K_NEXT)) {
-            /* Bring-up UX: đổi nội dung stub để test nút */
-            lcd_show_kitchen_event("K_NEXT");
+            /* A06.5 test: dùng K_NEXT để gửi PING->PONG */
+            uint8_t frame[32];
+            uint8_t seq = next_seq();
+            proto_build_ping(seq, frame);
+            send_and_wait_ack(frame);
+            lcd_show_status("TX PING");
         }
         if (buttons_was_pressed(BTN_ID_K_DONE)) {
             uint8_t frame[32];
