@@ -17,6 +17,11 @@ PIC có 2 **mode** (1 MCU, 2 cụm I/O):
 
 **Chuyển mode:** nút `BTN_MODE` (toggle).
 
+### Bring-up hiển thị (A06.2)
+
+- Mode Bếp: LCD bếp hiển thị `MODE:K` + status/event stub (K_NEXT/K_DONE/EVT_ORDER_NEW...).
+- Mode Quầy: LCD quầy hiển thị `MODE:C` + chuỗi nhập `table_code` từ keypad.
+
 ## 2) Link/transaction state
 
 Mỗi mode dùng chung một state machine transaction tối thiểu:

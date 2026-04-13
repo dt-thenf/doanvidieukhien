@@ -33,6 +33,18 @@ PORTB hiện “đông tín hiệu”:
 
 Nguyên tắc: khi cần set/clear `CSN` hoặc rows, ưu tiên gọi `portb_set_nrf_csn()` / `portb_set_keypad_rows()` thay vì viết trực tiếp `PORTBbits.RBx`.
 
+## Keypad + LCD bring-up (A06.2)
+
+- **Keypad 4×4**: đã có scan cơ bản + debounce theo tick 10ms trong `keypad_driver.c` (giả định 1 phím/lần).
+  - Mapping phổ biến: `1 2 3 A / 4 5 6 B / 7 8 9 C / * 0 # D`
+  - `A` → LOOKUP, `B` → PAID, `*` → backspace, `#` → clear
+- **LCD 4-bit (HD44780)**: đã implement init/clear/cursor/print; 2 LCD dùng chung bus + 2 EN.
+  - `RD0` = EN_KITCHEN, `RD1` = EN_COUNTER
+  - `RD2` = RS, `RD4..RD7` = D4..D7
+
+Lưu ý phần cứng:
+- Cần pull-up cho các chân **column input** nếu không có pull-up nội phù hợp (RC0/RC1/RC2/RE0).
+
 ## Source of truth
 
 - **Giao thức wire**: `docs/architecture/pi-pic-protocol.md`

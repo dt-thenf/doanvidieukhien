@@ -29,6 +29,11 @@ Nằm trong `firmware/pic16f887/`:
   - `nrf_bridge.*` (interface/stub; thay bằng SPI/IRQ thật ở vòng sau)
   - `portb_safe.*` (I/O safety: shadow PORTB outputs, tránh ghi rải rác)
 
+## Bring-up ngoại vi (A06.2)
+
+- `lcd_driver.*`: HD44780 4-bit chạy thật (2 LCD share bus, 2 chân EN chọn màn bếp/quầy).
+- `keypad_driver.*`: scan 4×4 + debounce theo tick 10ms, phát event ký tự đơn giản cho `app_state`.
+
 ## Luồng dữ liệu (tối thiểu)
 
 - **PIC → Pi (CMD)**:

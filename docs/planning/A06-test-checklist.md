@@ -28,3 +28,5 @@
 - [ ] Retry timeout (D-19) phía Pi chỉ cho `EVT_*`; PIC retry CMD theo `pi-pic-protocol.md` §7.
 - [ ] Tick nền 10ms chạy thật bằng Timer0 (không dùng delay busy-loop), debounce nút ổn định.
 - [ ] Nút `MODE` chuyển Bếp/Quầy, không bounce gây đổi mode liên tục.
+- [ ] Keypad 4×4 scan cơ bản: nhấn `1 2 3` thấy chuỗi tích luỹ trên LCD quầy; `#` clear; `*` backspace.
+- [ ] LCD 4-bit init + clear + print: khi reset thấy “PIC KITCHEN/COUNTER BOOT”; nhấn MODE đổi màn hình hiển thị “READY”.
