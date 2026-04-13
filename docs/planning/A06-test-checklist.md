@@ -26,3 +26,5 @@
 
 - [ ] Frame built trên PIC khớp `pi_pic_proto.h` (hex `MSG_TYPE` giống Python).
 - [ ] Retry timeout (D-19) phía Pi chỉ cho `EVT_*`; PIC retry CMD theo `pi-pic-protocol.md` §7.
+- [ ] Tick nền 10ms chạy thật bằng Timer0 (không dùng delay busy-loop), debounce nút ổn định.
+- [ ] Nút `MODE` chuyển Bếp/Quầy, không bounce gây đổi mode liên tục.

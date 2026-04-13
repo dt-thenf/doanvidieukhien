@@ -39,6 +39,11 @@ Theo `docs/decisions/decision-log.md` **D-2026-04-12-03**:
 - **Retry**: 3 lần (tổng 4 lần phát: 1 + 3)
 - **Backoff**: cố định (vòng foundation hiện chưa thêm delay riêng, dùng lại timeout)
 
+## 3.1) Timebase (A06.1 bring-up)
+
+- Tick nền: **10ms** từ **Timer0 interrupt** (INTOSC 4MHz, preload TMR0=217, prescaler 1:256).
+- Debounce nút và timeout/retry được tính theo tick 10ms (beginner-friendly, ít ISR logic).
+
 ## 4) Mapping bản tin tối thiểu
 
 - **Pi → PIC**

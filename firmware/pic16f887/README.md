@@ -12,6 +12,11 @@ Mục tiêu vòng này: dựng **nền firmware rõ ràng theo module** cho PIC1
 - MPLAB XC8
 - Target: PIC16F887
 
+## Bring-up (A06.1)
+
+- Firmware đã có **tick 10ms thật** bằng **Timer0 interrupt** (`timebase.*`).
+- Clock mặc định: **INTOSC 4MHz** (khớp preload Timer0).
+
 ## Source of truth
 
 - **Giao thức wire**: `docs/architecture/pi-pic-protocol.md`
@@ -49,6 +54,13 @@ firmware/pic16f887/
 
 - **Đổi chân**: sửa `include/pin_map.h` (và nếu đổi nhóm PORT/logic, có thể cần cập nhật driver tương ứng).
 - **Config bits (fuse)**: dán `#pragma config ...` vào `include/config_bits.h`.
+
+## Hướng dẫn build nhanh (MPLAB X + XC8)
+
+1. Tạo project **Standalone Project** → Device **PIC16F887** → Compiler **XC8**.
+2. Add file source: toàn bộ `firmware/pic16f887/src/*.c`.
+3. Add include path: `firmware/pic16f887/include`.
+4. Build. Nếu bạn đổi clock khác 4MHz, cần cập nhật phần timebase (xem `src/timebase.c`).
 
 ## Test logic khi chưa có phần cứng thật
 

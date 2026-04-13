@@ -12,6 +12,7 @@
 
 #include "../include/config_bits.h"
 #include "../include/pin_map.h"
+#include "../include/timebase.h"
 
 #include "../include/app_state.h"
 #include "../include/protocol.h"
@@ -21,8 +22,17 @@
 #include "../include/buttons.h"
 #include "../include/buzzer.h"
 
+/* Khi dùng __delay_ms, cần _XTAL_FREQ. Vòng A06.1 không phụ thuộc delay,
+ * nhưng vẫn khai báo để sau này thêm debug dễ dàng.
+ */
+#define _XTAL_FREQ 4000000UL
+
 static void fw_init(void) {
-    /* TODO: clock init nếu cần (mặc định INTOSC) */
+    /* Clock: INTOSC 4MHz (khớp timebase Timer0 preload) */
+    OSCCONbits.IRCF2 = 1;
+    OSCCONbits.IRCF1 = 1;
+    OSCCONbits.IRCF0 = 0; /* 110 = 4MHz */
+    OSCCONbits.SCS = 1;   /* internal oscillator */
 
     pin_map_init();
 
@@ -33,6 +43,8 @@ static void fw_init(void) {
     nrf_bridge_init();
 
     app_init();
+
+    timebase_init();
 }
 
 static void fw_tick_10ms(void) {
@@ -49,10 +61,10 @@ static void fw_tick_10ms(void) {
 void main(void) {
     fw_init();
 
-    /* Super-loop đơn giản (beginner-friendly). Về sau có thể thay bằng timer ISR. */
+    /* Super-loop đơn giản + tick 10ms từ Timer0 ISR. */
     for (;;) {
-        fw_tick_10ms();
-
-        /* TODO: delay 10ms (timer hoặc __delay_ms với _XTAL_FREQ) */
+        if (timebase_consume_10ms_tick()) {
+            fw_tick_10ms();
+        }
     }
 }

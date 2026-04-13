@@ -19,10 +19,24 @@ static void disable_analog(void) {
 #ifdef ANSELH
     ANSELH = 0x00;
 #endif
+
+    /* Một số toolchain/device header có ADCON1/ADCON0 ảnh hưởng analog;
+     * set về trạng thái "an toàn" cho digital I/O.
+     */
+#ifdef ADCON0
+    ADCON0 = 0x00;
+#endif
 }
 
 void pin_map_init(void) {
     disable_analog();
+
+    /* Clear latches (tránh glitch khi chuyển TRIS) */
+    LATA = 0x00;
+    LATB = 0x00;
+    LATC = 0x00;
+    LATD = 0x00;
+    LATE = 0x00;
 
     /* LCD: outputs */
     LCD_RS_TRIS = 0;
