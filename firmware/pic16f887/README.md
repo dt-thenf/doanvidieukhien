@@ -86,9 +86,15 @@ firmware/pic16f887/
 ## Hướng dẫn build nhanh (MPLAB X + XC8)
 
 1. Tạo project **Standalone Project** → Device **PIC16F887** → Compiler **XC8**.
-2. Add file source: toàn bộ `firmware/pic16f887/src/*.c`.
-3. Add include path: `firmware/pic16f887/include`.
-4. Build. Nếu bạn đổi clock khác 4MHz, cần cập nhật phần timebase (xem `src/timebase.c`).
+2. **Entry point**: `firmware/pic16f887/src/main.c`.
+3. Add file source: toàn bộ `firmware/pic16f887/src/*.c` (đặc biệt có `timebase.c`, `portb_safe.c`).
+4. Add include path: `firmware/pic16f887/include` (khuyến nghị; dù include hiện dùng đường dẫn tương đối `../include/...` vẫn build được).
+5. Build.
+
+### Nếu dùng clock khác 4MHz
+
+- `main.c`: chỉnh `OSCCONbits.IRCF*` + `_XTAL_FREQ` (nếu bạn dùng `__delay_*` ở nơi khác).
+- `src/timebase.c`: tính lại `TMR0_PRELOAD_*` để tick ~10ms khớp clock mới.
 
 ## Test logic khi chưa có phần cứng thật
 
