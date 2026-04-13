@@ -57,3 +57,4 @@
 
 - Cần **tắt analog** trên các chân dùng digital (đã làm trong `pin_map.c`).
 - Nút/Keypad giả định **active-low + pull-up**. Nếu dùng pull-up nội, cần cấu hình `OPTION_REG`/`WPUB` tương ứng (để vòng sau).
+- **PORTB safety (khuyến nghị trước khi làm NRF/keypad thật):** vì `RB0` (IRQ), `RB1..RB4` (rows), `RB5` (CSN) cùng nằm trên PORTB, firmware nên điều khiển output qua **shadow byte** (module `portb_safe.*`) thay vì ghi rải rác `PORTBbits.RBx`.

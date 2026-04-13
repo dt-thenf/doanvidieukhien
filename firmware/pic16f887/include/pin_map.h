@@ -45,6 +45,9 @@
  * Cols: RC0, RC1, RC2, RE0 (inputs with pull-ups)
  *
  * Lưu ý: tránh RB6/RB7 (ICSP) để dễ nạp/debug.
+ *
+ * Khuyến nghị: khi điều khiển rows, ưu tiên dùng `portb_safe.*` (shadow) thay vì
+ * ghi rải rác `PORTBbits.RBx` để tránh đụng `RB5(CSN)` và `RB0(IRQ)`.
  */
 #define KP_R0_OUT   PORTBbits.RB1
 #define KP_R0_TRIS  TRISBbits.TRISB1
@@ -103,7 +106,7 @@
  */
 #define NRF_CE_OUT     PORTAbits.RA4
 #define NRF_CE_TRIS    TRISAbits.TRISA4
-#define NRF_CSN_OUT    PORTBbits.RB5
+#define NRF_CSN_OUT    PORTBbits.RB5 /* prefer portb_set_nrf_csn() */
 #define NRF_CSN_TRIS   TRISBbits.TRISB5
 
 #define NRF_IRQ_PORT   PORTBbits.RB0

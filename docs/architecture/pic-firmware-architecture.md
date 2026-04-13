@@ -27,6 +27,7 @@ Nằm trong `firmware/pic16f887/`:
   - `buttons.*`
   - `buzzer.*`
   - `nrf_bridge.*` (interface/stub; thay bằng SPI/IRQ thật ở vòng sau)
+  - `portb_safe.*` (I/O safety: shadow PORTB outputs, tránh ghi rải rác)
 
 ## Luồng dữ liệu (tối thiểu)
 

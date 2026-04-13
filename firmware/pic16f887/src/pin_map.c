@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "../include/pin_map.h"
+#include "../include/portb_safe.h"
 
 static void disable_analog(void) {
     /* PIC16F887: tắt analog để dùng digital I/O.
@@ -72,7 +73,10 @@ void pin_map_init(void) {
     NRF_CSN_TRIS = 0;
     NRF_IRQ_TRIS = 1;
     NRF_CE_OUT = 0;
-    NRF_CSN_OUT = 1;
+    /* PORTB safety: init shadow + set CSN high (idle) */
+    portb_out_init(PORTB_OUT_MASK_NRF_CSN);
+    /* Optional: keypad rows default low */
+    portb_keypad_all_rows_low();
 
     /* Optional: enable weak pull-ups if needed (esp. keypad cols/buttons).
      * TODO: configure OPTION_REG / WPUB / IOCB according to wiring.

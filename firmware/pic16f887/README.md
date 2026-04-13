@@ -18,6 +18,21 @@ Mục tiêu vòng này: dựng **nền firmware rõ ràng theo module** cho PIC1
 - Clock mặc định: **INTOSC 4MHz** (khớp preload Timer0).
 - **Lưu ý pin:** giữ `MCLRE = ON` nên **không dùng RA3 làm output**. Pin map hiện dùng **RB5** cho NRF `CSN` (xem `docs/architecture/pic-pin-map.md`).
 
+## I/O safety (A06.1b)
+
+PORTB hiện “đông tín hiệu”:
+
+- **RB0**: NRF `IRQ` (input)
+- **RB1..RB4**: keypad rows (output)
+- **RB5**: NRF `CSN` (output)
+
+Để tránh ghi rải rác và khó debug, firmware dùng **shadow byte** cho các output PORTB qua module:
+
+- `include/portb_safe.h`
+- `src/portb_safe.c`
+
+Nguyên tắc: khi cần set/clear `CSN` hoặc rows, ưu tiên gọi `portb_set_nrf_csn()` / `portb_set_keypad_rows()` thay vì viết trực tiếp `PORTBbits.RBx`.
+
 ## Source of truth
 
 - **Giao thức wire**: `docs/architecture/pi-pic-protocol.md`
