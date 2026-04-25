@@ -12,9 +12,9 @@
         theme: {
           extend: {
             "colors": {
-                "primary": "#6B8F71", // Sage
-                "secondary": "#C4A882", // Soft wood
-                "background": "#FAF7F2", // Organic off-white
+                "primary": "#6B8F71",
+                "secondary": "#C4A882",
+                "background": "#FAF7F2",
                 "surface": "#FFFFFF",
                 "on-surface": "#3A3A3A",
                 "outline": "#8E918E"
@@ -54,7 +54,6 @@
     </style>
 </head>
 <body class="font-body text-on-surface selection:bg-primary/10">
-<!-- Top Navigation Bar -->
 <header class="bg-surface border-b border-[#EAE2D5] sticky top-0 z-50">
 <div class="flex justify-between items-center w-full px-6 py-4 max-w-[1280px] mx-auto">
 <div class="flex items-center gap-8">
@@ -64,29 +63,26 @@
 </div>
 <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
 <a class="text-primary border-b-2 border-primary pb-1" href="#">Tổng quan bàn</a>
-<a class="text-outline hover:text-primary transition-colors" href="#">Thực đơn</a>
-<a class="text-outline hover:text-primary transition-colors" href="#">Báo cáo</a>
+<a class="text-outline hover:text-primary transition-colors" href="#">Chờ thanh toán</a>
 </nav>
 </div>
 <div class="flex items-center gap-4">
 <button class="p-2 text-outline hover:text-primary transition-colors">
 <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
 </button>
-<div class="h-8 w-8 rounded-full overflow-hidden border border-secondary/20">
-<img class="w-full h-full object-cover" data-alt="portrait of a male restaurant staff member" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_WpvOFryeIDTInaiFPYF4FLpi2GwTO5tgCcGXVSNxafnPP1WtfV73SMwPu-hpFILuW9_ecawthNCznTs3l6RPbsWsiXnbcMaR-DJ2dg9XUx3MuI-O1QY7hOa1sxQkyl8A4AcLAsd03ygb4u8Fpo7OBAvGr0mjkB7KxIKjfES-j9QO6leMm_fqlL3i7G4-orXCNnscYbRMZuQIoGm0O27zDT0cRbz4YDFUshcQND74L4WtxO5zoQzkRvcaxzbAVdsMfL0li7BT1CKP"/>
+<div class="flex h-8 w-8 items-center justify-center rounded-full border border-secondary/20 bg-[#F8F5F0] text-outline">
+<span class="material-symbols-outlined text-[18px]" data-icon="person">person</span>
 </div>
 </div>
 </div>
 </header>
 <main class="max-w-[1280px] mx-auto px-6 py-8">
-<!-- Header & KPIs -->
 <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
 <div>
 <p class="text-[11px] font-bold tracking-widest text-secondary uppercase mb-1">Thời gian thực</p>
 <h1 class="text-2xl font-bold font-headline text-on-surface">Tổng quan khu vực bàn</h1>
 </div>
 <div class="flex flex-wrap gap-3">
-<!-- KPI Tile: OPEN -->
 <div class="flat-card px-5 py-3 rounded-lg flex items-center gap-3">
 <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary">
 <span class="material-symbols-outlined text-lg" data-icon="restaurant">restaurant</span>
@@ -96,7 +92,6 @@
 <p class="text-lg font-semibold tabular-nums">5 <span class="text-xs font-normal text-outline lowercase">bàn</span></p>
 </div>
 </div>
-<!-- KPI Tile: PAYMENT -->
 <div class="flat-card px-5 py-3 rounded-lg flex items-center gap-3">
 <div class="w-8 h-8 rounded bg-secondary/10 flex items-center justify-center text-secondary">
 <span class="material-symbols-outlined text-lg" data-icon="payments">payments</span>
@@ -106,7 +101,6 @@
 <p class="text-lg font-semibold tabular-nums">2 <span class="text-xs font-normal text-outline lowercase">bàn</span></p>
 </div>
 </div>
-<!-- KPI Tile: SETTLED -->
 <div class="flat-card px-5 py-3 rounded-lg flex items-center gap-3">
 <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-outline">
 <span class="material-symbols-outlined text-lg" data-icon="check_circle">check_circle</span>
@@ -118,14 +112,12 @@
 </div>
 </div>
 </div>
-<!-- Filter Chips -->
 <div class="flex items-center gap-2 mb-6">
 <button class="px-4 py-1.5 rounded bg-primary text-white text-xs font-medium">Tất cả</button>
 <button class="px-4 py-1.5 rounded bg-surface border border-[#EAE2D5] text-on-surface text-xs font-medium hover:bg-background transition-colors">Đang phục vụ</button>
 <button class="px-4 py-1.5 rounded bg-surface border border-[#EAE2D5] text-on-surface text-xs font-medium hover:bg-background transition-colors">Chờ thanh toán</button>
 <button class="px-4 py-1.5 rounded bg-surface border border-[#EAE2D5] text-on-surface text-xs font-medium hover:bg-background transition-colors">Đã kết sổ</button>
 </div>
-<!-- Main Table -->
 <div class="flat-card rounded-lg overflow-hidden shadow-sm">
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse tabular-nums">
@@ -140,12 +132,11 @@
 </tr>
 </thead>
 <tbody class="divide-y divide-[#EAE2D5] text-sm">
-<!-- Row 1 -->
 <tr class="hover:bg-[#FAF7F2]/50 transition-colors">
 <td class="px-6 py-5 font-semibold text-primary">Bàn 01</td>
 <td class="px-6 py-5">
 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase">
-<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Open
+<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Đang phục vụ
                             </span>
 </td>
 <td class="px-6 py-5 text-outline">#VEG-1024</td>
@@ -155,12 +146,11 @@
 <button class="text-primary font-medium hover:underline">Xem</button>
 </td>
 </tr>
-<!-- Row 2 -->
 <tr class="hover:bg-[#FAF7F2]/50 transition-colors">
 <td class="px-6 py-5 font-semibold text-primary">Bàn 02</td>
 <td class="px-6 py-5">
 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-secondary/10 text-secondary uppercase">
-<span class="w-1 h-1 rounded-full bg-secondary mr-1.5"></span> Payment Request
+<span class="w-1 h-1 rounded-full bg-secondary mr-1.5"></span> Chờ thanh toán
                             </span>
 </td>
 <td class="px-6 py-5 text-outline">#VEG-1025</td>
@@ -170,12 +160,11 @@
 <button class="text-primary font-medium hover:underline">Xem</button>
 </td>
 </tr>
-<!-- Row 3 -->
 <tr class="hover:bg-[#FAF7F2]/50 transition-colors">
 <td class="px-6 py-5 font-semibold text-primary">Bàn 03</td>
 <td class="px-6 py-5">
 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-outline uppercase">
-<span class="w-1 h-1 rounded-full bg-outline mr-1.5"></span> Settled
+<span class="w-1 h-1 rounded-full bg-outline mr-1.5"></span> Đã kết sổ
                             </span>
 </td>
 <td class="px-6 py-5 text-outline">#VEG-1018</td>
@@ -188,12 +177,11 @@
 </div>
 </td>
 </tr>
-<!-- Row 4 -->
 <tr class="hover:bg-[#FAF7F2]/50 transition-colors">
 <td class="px-6 py-5 font-semibold text-primary">Bàn 04</td>
 <td class="px-6 py-5">
 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase">
-<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Open
+<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Đang phục vụ
                             </span>
 </td>
 <td class="px-6 py-5 text-outline">#VEG-1026</td>
@@ -203,12 +191,11 @@
 <button class="text-primary font-medium hover:underline">Xem</button>
 </td>
 </tr>
-<!-- Row 5 -->
 <tr class="hover:bg-[#FAF7F2]/50 transition-colors">
 <td class="px-6 py-5 font-semibold text-primary">Bàn 05</td>
 <td class="px-6 py-5">
 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase">
-<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Open
+<span class="w-1 h-1 rounded-full bg-primary mr-1.5"></span> Đang phục vụ
                             </span>
 </td>
 <td class="px-6 py-5 text-outline">#VEG-1027</td>
@@ -223,11 +210,10 @@
 </div>
 </div>
 </main>
-<!-- Footer -->
 <footer class="mt-12 border-t border-[#EAE2D5] py-8">
 <div class="flex flex-col md:flex-row justify-between items-center px-6 w-full max-w-[1280px] mx-auto gap-4">
 <p class="text-[11px] text-outline">
-            © 2024 The Culinary Atelier — Hệ thống Quản lý Vận hành
+            © 2024 Quán chay — vận hành demo
         </p>
 <div class="flex gap-6">
 <a class="text-[11px] text-outline hover:text-primary transition-colors" href="#">Hỗ trợ</a>
