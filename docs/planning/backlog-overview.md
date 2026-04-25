@@ -17,7 +17,7 @@
 - Logging phục vụ debug demo.
 
 ## 4. PIC firmware (PIC16F887)
-- Khởi tạo ngoại vi: LCD bếp/quầy, buzzer, nút, keypad 4×4.
+- Khởi tạo ngoại vi: OLED bếp/quầy (SSD1306), buzzer, nút, keypad 4×4.
 - Giao tiếp NRF24 với Pi; parse lệnh; debounce.
 - **Chế độ bếp** và **chế độ quầy** (chuyển chế độ rõ ràng).
 - Hiển thị lỗi mất kết nối Pi (tối thiểu).

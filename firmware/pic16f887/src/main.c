@@ -17,7 +17,7 @@
 #include "../include/app_state.h"
 #include "../include/protocol.h"
 #include "../include/nrf_bridge.h"
-#include "../include/lcd_driver.h"
+#include "../include/oled_driver.h"
 #include "../include/keypad_driver.h"
 #include "../include/buttons.h"
 #include "../include/buzzer.h"
@@ -36,7 +36,7 @@ static void fw_init(void) {
 
     pin_map_init();
 
-    lcd_init();
+    oled_init();
     keypad_init();
     buttons_init();
     buzzer_init();

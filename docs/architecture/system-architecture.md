@@ -11,8 +11,8 @@
 - Sinh QR theo bàn; điều phối trạng thái sau lệnh hợp lệ từ web hoặc PIC.
 
 ## PIC16F887 (duy nhất)
-- **Bếp:** buzzer, LCD, nút (ví dụ xem / chuyển / hoàn thành-thoát).
-- **Quầy:** keypad 4×4, LCD (tra cứu, xác nhận thu tiền).
+- **Bếp:** buzzer, **OLED 0.96" SSD1306**, nút (ví dụ xem / chuyển / hoàn thành-thoát).
+- **Quầy:** keypad 4×4, **OLED 0.96" SSD1306** (tra cứu, xác nhận thu tiền).
 - Một PIC điều khiển **hai cụm** IO — cần thiết kế rõ **chế độ** bếp/quầy trên firmware.
 
 ## NRF24L01

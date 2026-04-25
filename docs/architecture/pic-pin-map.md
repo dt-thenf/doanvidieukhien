@@ -7,8 +7,8 @@
 
 - Tránh đụng **ICSP** (RB6/RB7) để nạp/debug thuận lợi.
 - Dùng **MSSP SPI** mặc định cho NRF24 (RC3/RC4/RC5).
-- LCD dùng **4-bit mode** để tiết kiệm pin.
-- 2 LCD (Bếp/Quầy): **dùng chung bus data + RS**, tách **2 chân EN**.
+- Vì RC3/RC4/RC5 đã dành cho NRF SPI, OLED phải dùng **software I2C (bit-bang)** trên pin khác.
+- 2 OLED (Bếp/Quầy) dùng chung bus I2C, **tách theo địa chỉ**.
 
 ## Bảng pin map (đề xuất)
 
@@ -23,20 +23,25 @@
 
 > **Lưu ý:** giữ `MCLRE = ON` nên **không dùng RA3 làm output** (tránh xung đột MCLR trên một số mạch/thiết kế). Vì vậy CSN được chuyển sang RB5.
 
-### 2) LCD (HD44780, 4-bit) — dùng chung bus
+### 2) 2 OLED 0.96 inch (SSD1306 128x64) — software I2C (bit-bang)
 
-**Bus chung:**
+**Pin bus (chung cho cả 2 OLED):**
 
-- **RS**: RD2  
-- **D4..D7**: RD4..RD7  
-- **RW**: nối GND
+- **OLED_SCL**: `RD0`  
+- **OLED_SDA**: `RD1`
 
-**Enable riêng:**
+**Địa chỉ I2C (7-bit) — Source of Truth dự án:**
 
-- **EN_KITCHEN**: RD0  
-- **EN_COUNTER**: RD1
+- **kitchen OLED**: `0x3C`
+- **counter OLED**: `0x3D`
 
-> Chiến lược này giúp tiết kiệm pin và vẫn giữ được 2 màn hình độc lập theo mode.
+**Lưu ý phần cứng quan trọng:**
+
+- Bus I2C cần **pull-up** (ví dụ 4.7k) cho SCL/SDA.
+- Nếu thực tế 2 module OLED bạn mua **cùng địa chỉ** (thường cả hai đều `0x3C`):
+  - Cần **đổi jumper/address** (nếu module hỗ trợ), hoặc
+  - Dùng **I2C mux** (ví dụ TCA9548A).
+  - Dù vậy, tài liệu/firmware của dự án vẫn **giữ giả định** `0x3C/0x3D` như SoT.
 
 ### 3) Keypad 4×4 (matrix)
 

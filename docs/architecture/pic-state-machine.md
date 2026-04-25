@@ -8,19 +8,19 @@ PIC có 2 **mode** (1 MCU, 2 cụm I/O):
 
 - **Mode Bếp (`APP_MODE_KITCHEN`)**
   - Input chính: nút bếp (`DONE`, `NEXT`)
-  - Output chính: LCD bếp + buzzer
+  - Output chính: OLED bếp + buzzer
   - Gửi lệnh: `CMD_KITCHEN_DONE`
 - **Mode Quầy (`APP_MODE_COUNTER`)**
   - Input chính: keypad 4×4 (nhập `table_code`)
-  - Output chính: LCD quầy + buzzer
+  - Output chính: OLED quầy + buzzer
   - Gửi lệnh: `CMD_COUNTER_LOOKUP`, `CMD_COUNTER_PAID`
 
 **Chuyển mode:** nút `BTN_MODE` (toggle).
 
 ### Bring-up hiển thị (A06.2)
 
-- Mode Bếp: LCD bếp hiển thị `MODE:K` + status/event stub (K_NEXT/K_DONE/EVT_ORDER_NEW...).
-- Mode Quầy: LCD quầy hiển thị `MODE:C` + chuỗi nhập `table_code` từ keypad.
+- Mode Bếp: OLED bếp hiển thị `MODE:K` + status/event stub (K_NEXT/K_DONE/EVT_ORDER_NEW...).
+- Mode Quầy: OLED quầy hiển thị `MODE:C` + chuỗi nhập `table_code` từ keypad.
 
 ## 2) Link/transaction state
 

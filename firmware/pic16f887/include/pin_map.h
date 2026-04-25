@@ -11,32 +11,22 @@
 #include <xc.h>
 
 /* =========================
- * LCD (HD44780, 4-bit mode)
+ * OLED 0.96" SSD1306 (128x64) — software I2C (bit-bang)
  * =========================
- * Chiến lược: dùng chung bus dữ liệu + RS, tách 2 chân EN cho 2 LCD (Bếp/Quầy).
- * RW nối GND (write-only) để tiết kiệm pin.
+ * Ràng buộc: RC3/RC4/RC5 đang dùng NRF SPI, nên OLED phải đi software I2C.
  *
- * - Data nibble: RD4..RD7
- * - RS: RD2
- * - EN_KITCHEN: RD0
- * - EN_COUNTER: RD1
+ * Default pin:
+ * - RD0 = SCL
+ * - RD1 = SDA
+ *
+ * Lưu ý phần cứng:
+ * - Bus I2C cần pull-up (ví dụ 4.7k) cho SCL/SDA.
+ * - Driver bit-bang dùng kiểu "open-drain": kéo thấp bằng output=0, nhả cao bằng TRIS=input.
  */
-#define LCD_RS_OUT      PORTDbits.RD2
-#define LCD_RS_TRIS     TRISDbits.TRISD2
-
-#define LCD_D4_OUT      PORTDbits.RD4
-#define LCD_D4_TRIS     TRISDbits.TRISD4
-#define LCD_D5_OUT      PORTDbits.RD5
-#define LCD_D5_TRIS     TRISDbits.TRISD5
-#define LCD_D6_OUT      PORTDbits.RD6
-#define LCD_D6_TRIS     TRISDbits.TRISD6
-#define LCD_D7_OUT      PORTDbits.RD7
-#define LCD_D7_TRIS     TRISDbits.TRISD7
-
-#define LCD_EN_K_OUT    PORTDbits.RD0
-#define LCD_EN_K_TRIS   TRISDbits.TRISD0
-#define LCD_EN_C_OUT    PORTDbits.RD1
-#define LCD_EN_C_TRIS   TRISDbits.TRISD1
+#define OLED_SCL_PORT   PORTDbits.RD0
+#define OLED_SCL_TRIS   TRISDbits.TRISD0
+#define OLED_SDA_PORT   PORTDbits.RD1
+#define OLED_SDA_TRIS   TRISDbits.TRISD1
 
 /* =========================
  * Keypad 4x4 (matrix)

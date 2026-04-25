@@ -39,14 +39,9 @@ void pin_map_init(void) {
     PORTD = 0x00;
     PORTE = 0x00;
 
-    /* LCD: outputs */
-    LCD_RS_TRIS = 0;
-    LCD_EN_K_TRIS = 0;
-    LCD_EN_C_TRIS = 0;
-    LCD_D4_TRIS = 0;
-    LCD_D5_TRIS = 0;
-    LCD_D6_TRIS = 0;
-    LCD_D7_TRIS = 0;
+    /* OLED software I2C: idle high (release lines) */
+    OLED_SCL_TRIS = 1;
+    OLED_SDA_TRIS = 1;
 
     /* Keypad: rows outputs, cols inputs */
     KP_R0_TRIS = 0;

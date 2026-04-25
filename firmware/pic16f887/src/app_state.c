@@ -13,7 +13,7 @@
 #include "../include/nrf_bridge.h"
 #include "../include/buttons.h"
 #include "../include/keypad_driver.h"
-#include "../include/lcd_driver.h"
+#include "../include/oled_driver.h"
 #include "../include/buzzer.h"
 
 static app_ctx_t g;
@@ -39,27 +39,27 @@ static void on_evt_order_new(const proto_frame_t *f) {
     (void)f;
     /* Stub UX: beep + show minimal text */
     buzzer_beep_short();
-    lcd_show_kitchen_event("EVT_ORDER_NEW");
+    oled_show_kitchen_event("EVT_ORDER_NEW");
 }
 
 static void on_evt_payment_pending(const proto_frame_t *f) {
     (void)f;
     buzzer_beep_short();
-    lcd_show_counter_event("EVT_PAYMENT_PENDING");
+    oled_show_counter_event("EVT_PAYMENT_PENDING");
 }
 
 static void on_ack(const proto_frame_t *f) {
     (void)f;
     g.link = LINK_UP;
     g.state = APP_STATE_IDLE;
-    lcd_show_status("ACK");
+    oled_show_status("ACK");
 }
 
 static void on_nack(const proto_frame_t *f) {
     (void)f;
     g.link = LINK_UP;
     g.state = APP_STATE_IDLE;
-    lcd_show_status("NACK");
+    oled_show_status("NACK");
 }
 
 static void handle_rx_frame(const uint8_t *rx32) {
@@ -70,7 +70,7 @@ static void handle_rx_frame(const uint8_t *rx32) {
     switch (f.msg_type) {
         case PI_PIC_MSG_PONG:
             g.link = LINK_UP;
-            lcd_show_status("PONG");
+            oled_show_status("PONG");
             break;
         case PI_PIC_MSG_ACK:
             /* ACK/NACK should match last TX seq when waiting. */
@@ -112,7 +112,7 @@ void app_init(void) {
     g.retries_left = 0;
     for (i = 0; i < 32; i++) g.last_tx[i] = 0;
 
-    lcd_show_status("BOOT");
+    oled_show_status("BOOT");
     g.state = APP_STATE_IDLE;
 }
 
@@ -124,7 +124,7 @@ static void tick_inputs_and_actions(void) {
     /* Mode switch */
     if (buttons_was_pressed(BTN_ID_MODE)) {
         g.mode = (g.mode == APP_MODE_KITCHEN) ? APP_MODE_COUNTER : APP_MODE_KITCHEN;
-        lcd_show_mode(g.mode);
+        oled_show_mode(g.mode);
     }
 
     /* Kitchen: DONE button -> CMD_KITCHEN_DONE(table_code) */
@@ -135,7 +135,7 @@ static void tick_inputs_and_actions(void) {
             uint8_t seq = next_seq();
             proto_build_ping(seq, frame);
             send_and_wait_ack(frame);
-            lcd_show_status("TX PING");
+            oled_show_status("TX PING");
         }
         if (buttons_was_pressed(BTN_ID_K_DONE)) {
             uint8_t frame[32];
@@ -143,7 +143,7 @@ static void tick_inputs_and_actions(void) {
             uint8_t seq = next_seq();
             proto_build_cmd_kitchen_done(seq, table_code, frame);
             send_and_wait_ack(frame);
-            lcd_show_status("TX K_DONE");
+            oled_show_status("TX K_DONE");
         }
     }
 
@@ -161,16 +161,16 @@ static void tick_inputs_and_actions(void) {
                 uint8_t seq = next_seq();
                 proto_build_cmd_counter_lookup(seq, PI_PIC_LOOKUP_BY_TABLE_CODE, ke.table_code, frame);
                 send_and_wait_ack(frame);
-                lcd_show_status("TX LOOKUP");
+                oled_show_status("TX LOOKUP");
             } else if (ke.kind == KE_KIND_PAID) {
                 uint8_t frame[32];
                 uint8_t seq = next_seq();
                 proto_build_cmd_counter_paid(seq, ke.table_code, frame);
                 send_and_wait_ack(frame);
-                lcd_show_status("TX PAID");
+                oled_show_status("TX PAID");
             } else {
                 /* digits: already handled by keypad driver; lcd can show entry */
-                lcd_show_counter_entry(ke.entry_text);
+                oled_show_counter_entry(ke.entry_text);
             }
         }
     }
@@ -200,11 +200,11 @@ void app_tick(void) {
                 g.retries_left--;
                 g.wait_ms = 250;
                 nrf_bridge_send(g.last_tx, 32);
-                lcd_show_status("RETRY");
+                oled_show_status("RETRY");
             } else {
                 g.link = LINK_DOWN;
                 g.state = APP_STATE_IDLE;
-                lcd_show_status("LINK DOWN");
+                oled_show_status("LINK DOWN");
             }
         }
     }

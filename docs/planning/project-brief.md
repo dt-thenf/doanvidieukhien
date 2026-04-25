@@ -9,7 +9,7 @@
 
 ## Phạm vi (in-scope)
 - Web khách (QR theo bàn), web quản trị tối thiểu, backend trên Pi.
-- Firmware PIC: bếp (buzzer, LCD, nút) + quầy (keypad, LCD).
+- Firmware PIC: bếp (buzzer, **OLED SSD1306**, nút) + quầy (keypad, **OLED SSD1306**).
 - Kênh RF Pi–PIC ở mức đủ demo (gói tin rút gọn, xử lý lỗi cơ bản).
 
 ## Ngoài phạm vi (out-of-scope)

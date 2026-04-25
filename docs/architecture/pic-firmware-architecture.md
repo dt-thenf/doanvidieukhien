@@ -22,7 +22,7 @@ Nằm trong `firmware/pic16f887/`:
 - **`include/protocol.h` + `src/protocol.c`**: parse/serialize frame 32 byte; build `CMD_*`, `PING`.
 - **`include/app_state.h` + `src/app_state.c`**: state machine & retry policy (D-2026-04-12-03).
 - **Drivers (stub)**:
-  - `lcd_driver.*`
+  - `oled_driver.*` (SSD1306 128x64, software I2C bit-bang; 2 màn theo địa chỉ)
   - `keypad_driver.*`
   - `buttons.*`
   - `buzzer.*`
@@ -31,7 +31,7 @@ Nằm trong `firmware/pic16f887/`:
 
 ## Bring-up ngoại vi (A06.2)
 
-- `lcd_driver.*`: HD44780 4-bit chạy thật (2 LCD share bus, 2 chân EN chọn màn bếp/quầy).
+- `oled_driver.*`: SSD1306 text-mode tối thiểu: init/clear/print text ngắn, chọn kitchen/counter theo address.
 - `keypad_driver.*`: scan 4×4 + debounce theo tick 10ms, phát event ký tự đơn giản cho `app_state`.
 
 ## Bring-up NRF TX-first (A06.3)
@@ -48,7 +48,7 @@ Nằm trong `firmware/pic16f887/`:
   - `app_state` tạo frame qua `protocol` → gửi `nrf_bridge_send()` → vào `WAIT_ACK`.
   - Nếu hết timeout: retry tối đa 3 lần; hết retry: `LINK_DOWN` (hiển thị “mất liên lạc”).
 - **Pi → PIC (EVT/ACK/NACK/PONG)**:
-  - `nrf_bridge_try_recv()` trả frame → `app_state` parse → cập nhật UI (LCD + buzzer).
+  - `nrf_bridge_try_recv()` trả frame → `app_state` parse → cập nhật UI (OLED + buzzer).
 
 ## Vì sao chọn super-loop + tick 10ms?
 

@@ -4,7 +4,7 @@ Mục tiêu vòng này: dựng **nền firmware rõ ràng theo module** cho PIC1
 
 - **State machine**: 2 chế độ **Bếp** / **Quầy** (1 MCU).
 - **Protocol**: parser/serializer khung 32 byte theo `docs/architecture/pi-pic-protocol.md`.
-- **Driver**: LCD/Keypad/Buttons/Buzzer/NRF = **stub interface** (chưa cần phần cứng thật).
+- **Driver**: OLED/Keypad/Buttons/Buzzer/NRF = **stub interface** (chưa cần phần cứng thật).
 
 ## Toolchain
 
@@ -33,14 +33,14 @@ PORTB hiện “đông tín hiệu”:
 
 Nguyên tắc: khi cần set/clear `CSN` hoặc rows, ưu tiên gọi `portb_set_nrf_csn()` / `portb_set_keypad_rows()` thay vì viết trực tiếp `PORTBbits.RBx`.
 
-## Keypad + LCD bring-up (A06.2)
+## Keypad + OLED bring-up (A06.2)
 
 - **Keypad 4×4**: đã có scan cơ bản + debounce theo tick 10ms trong `keypad_driver.c` (giả định 1 phím/lần).
   - Mapping phổ biến: `1 2 3 A / 4 5 6 B / 7 8 9 C / * 0 # D`
   - `A` → LOOKUP, `B` → PAID, `*` → backspace, `#` → clear
-- **LCD 4-bit (HD44780)**: đã implement init/clear/cursor/print; 2 LCD dùng chung bus + 2 EN.
-  - `RD0` = EN_KITCHEN, `RD1` = EN_COUNTER
-  - `RD2` = RS, `RD4..RD7` = D4..D7
+- **2 OLED 0.96" SSD1306 (128×64)**: dùng chung bus I2C, **software I2C (bit-bang)** vì RC3/RC4/RC5 dành cho NRF SPI.
+  - `RD0` = OLED_SCL, `RD1` = OLED_SDA
+  - Address (SoT dự án): kitchen=`0x3C`, counter=`0x3D`
 
 Lưu ý phần cứng:
 - Cần pull-up cho các chân **column input** nếu không có pull-up nội phù hợp (RC0/RC1/RC2/RE0).
@@ -99,7 +99,7 @@ firmware/pic16f887/
     protocol.h           # build/parse frame 32 byte
     app_state.h          # state machine nền
     nrf_bridge.h         # interface/stub NRF24
-    lcd_driver.h         # interface/stub LCD
+    oled_driver.h        # interface/stub OLED (SSD1306, software I2C)
     keypad_driver.h      # interface/stub keypad
     buttons.h            # polling+debounce nút
     buzzer.h             # beep đơn giản
@@ -109,7 +109,7 @@ firmware/pic16f887/
     protocol.c
     app_state.c
     nrf_bridge.c
-    lcd_driver.c
+    oled_driver.c
     keypad_driver.c
     buttons.c
     buzzer.c

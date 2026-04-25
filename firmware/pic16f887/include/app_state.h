@@ -40,7 +40,7 @@ typedef struct {
 void app_init(void);
 void app_tick(void);
 
-/* Expose current mode for UI drivers (LCD) */
+/* Expose current mode for UI drivers (OLED) */
 app_mode_t app_get_mode(void);
 
 #endif /* APP_STATE_H */
